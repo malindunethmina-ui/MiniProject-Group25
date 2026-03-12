@@ -489,9 +489,200 @@
             display: block;
         }
 
+        /* Home Page Styling */
+        .home-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+
+        .home-navbar {
+            height: 70px;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            flex-shrink: 0;
+        }
+
+        .home-navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .home-navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .home-navbar-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .home-navbar-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        .home-navbar-cta {
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .home-navbar-cta:hover {
+            background-color: var(--accent-blue-hover);
+        }
+
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            padding: 80px 40px;
+            flex-grow: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .hero-cta-btn {
+            display: inline-block;
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .hero-cta-btn:hover {
+            background-color: var(--accent-blue-hover);
+            transform: translateY(-2px);
+        }
+
+        .hero-image-placeholder {
+            background-color: var(--bg-light-secondary);
+            border-radius: var(--border-radius);
+            border: 2px dashed var(--border-light);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            color: var(--text-muted);
+        }
+
+        .hero-image-placeholder i {
+            font-size: 3rem;
+            color: var(--accent-blue);
+        }
+
+        .hero-image-placeholder p {
+            font-size: 1rem;
+        }
+
+        .home-footer {
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-light);
+            padding: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .home-footer p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .home-content {
+            flex-grow: 1;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .grid-container { grid-template-columns: 1fr; }
+            
+            .hero-section {
+                grid-template-columns: 1fr;
+                padding: 60px 32px;
+                gap: 40px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-image-placeholder {
+                height: 300px;
+            }
+
+            .home-navbar {
+                padding: 0 24px;
+            }
+
+            .home-navbar-links {
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .home-navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 16px 24px;
+                gap: 16px;
+            }
+
+            .home-navbar-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .hero-section {
+                padding: 40px 24px;
+            }
+
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero-content p {
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
@@ -502,7 +693,8 @@
             <i class="fa-solid fa-graduation-cap"></i> Studify
         </div>
         <ul class="nav-menu">
-            <li class="nav-item active"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
+            <li class="nav-item active"><i class="fa-solid fa-home"></i> Home</li>
+            <li class="nav-item"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
             <li class="nav-item"><i class="fa-solid fa-stopwatch"></i> Timers</li>
             <li class="nav-item"><i class="fa-solid fa-book"></i> Study Materials</li>
             <li class="nav-item"><i class="fa-solid fa-clipboard-question"></i> Quizzes</li>
@@ -520,8 +712,47 @@
         </header>
 
         <div class="content-area">
+            <!-- Home Section -->
+            <div id="home" class="section active">
+                <div class="home-wrapper">
+                    <!-- Home Navbar -->
+                    <nav class="home-navbar">
+                        <div class="home-navbar-logo">
+                            <i class="fa-solid fa-graduation-cap"></i> Studify
+                        </div>
+                        <ul class="home-navbar-links">
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#howitworks">How it Works</a></li>
+                            <li><a href="#" class="home-navbar-cta">Try Demo</a></li>
+                        </ul>
+                    </nav>
+
+                    <!-- Hero Section -->
+                    <div class="home-content">
+                        <section class="hero-section">
+                            <div class="hero-content">
+                                <h1>Stop Cramming. Start Learning with AI.</h1>
+                                <p>Master Your Exams with AI-Powered Study Tools. Combine focused Pomodoro timers with intelligent study material generation—automatically create summaries, mind maps, and quizzes from your PDFs.</p>
+                                <button class="hero-cta-btn" onclick="navigateToSection('dashboard')">
+                                    <i class="fa-solid fa-rocket"></i> Get Started for Free
+                                </button>
+                            </div>
+                            <div class="hero-image-placeholder">
+                                <i class="fa-solid fa-image"></i>
+                                <p>Product Screenshot</p>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Footer -->
+                    <footer class="home-footer">
+                        <p>&copy; 2026 Studify. All rights reserved. Empower your learning journey.</p>
+                    </footer>
+                </div>
+            </div>
+
             <!-- Dashboard Section -->
-            <div id="dashboard" class="section active">
+            <div id="dashboard" class="section">
                 <div class="welcome-banner">
                     <h2>Welcome back, Alex! 👋</h2>
                     <p>You have 2 upcoming exams this week. Stay focused, you've got this!</p>
@@ -868,6 +1099,7 @@
         // Navigation functionality
         document.addEventListener('DOMContentLoaded', function() {
             const navItems = document.querySelectorAll('.nav-item');
+            const topBar = document.querySelector('.top-bar');
             
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
@@ -890,15 +1122,33 @@
                         selectedSection.classList.add('active');
                     }
                     
+                    // Hide top bar for home section, show for others
+                    if (sectionName === 'home') {
+                        topBar.style.display = 'none';
+                    } else {
+                        topBar.style.display = 'flex';
+                    }
+                    
                     // Update the top bar title
                     updatePageTitle(sectionName);
                 });
             });
         });
 
+        function navigateToSection(sectionName) {
+            // Find and click the nav item with matching section name
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if (item.textContent.trim().toLowerCase() === sectionName) {
+                    item.click();
+                }
+            });
+        }
+
         function updatePageTitle(section) {
             const h1 = document.querySelector('.top-bar h1');
             const titles = {
+                'home': 'Home',
                 'dashboard': 'Student Dashboard',
                 'timers': 'Focus Timers',
                 'study materials': 'Study Materials',
@@ -910,6 +1160,12 @@
 
         // Profile Form Submission
         document.addEventListener('DOMContentLoaded', function() {
+            // Hide top bar for home section on initial load
+            const topBar = document.querySelector('.top-bar');
+            if (document.getElementById('home').classList.contains('active')) {
+                topBar.style.display = 'none';
+            }
+
             const profileForm = document.getElementById('profile-form');
             if (profileForm) {
                 profileForm.addEventListener('submit', function(e) {
