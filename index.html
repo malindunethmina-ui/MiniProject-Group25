@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* CSS Variables for Modern Palette */
+        :root {
+            --bg-canvas: #f4f7f8;
+            --bg-card: #ffffff;
+            --bg-sidebar: #1e293b;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --text-light: #f8fafc;
+            --accent-blue: #3b82f6;
+            --accent-blue-hover: #2563eb;
+            --accent-green: #10b981;
+            --accent-green-hover: #059669;
+            --danger-red: #ef4444;
+            --warning-yellow: #f59e0b;
+            --border-light: #e2e8f0;
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-sidebar);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            padding: 24px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: var(--accent-blue);
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 24px 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            color: #cbd5e1;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255,255,255,0.05);
+            color: var(--text-light);
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .nav-item i { width: 20px; text-align: center; }
+
+        /* Main Content Styling */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .top-bar {
+            height: 70px;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 32px;
+            flex-shrink: 0;
+        }
+
+        .top-bar h1 { font-size: 1.25rem; font-weight: 600; }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .content-area { padding: 32px; }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--accent-blue), #60a5fa);
+            color: white;
+            padding: 24px 32px;
+            border-radius: var(--border-radius);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .welcome-banner h2 { font-size: 1.5rem; margin-bottom: 8px; }
+        .welcome-banner p { opacity: 0.9; }
+
+        /* Grid Layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 4fr 6fr;
+            gap: 24px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 12px;
+        }
+
+        /* Exam Countdown Widget */
+        .exam-list { list-style: none; }
+        
+        .exam-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .exam-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .exam-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+        .exam-info p { font-size: 0.85rem; color: var(--text-muted); }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge.urgent { background-color: #fef2f2; color: var(--danger-red); }
+        .badge.warning { background-color: #fffbeb; color: var(--warning-yellow); }
+        .badge.safe { background-color: #ecfdf5; color: var(--accent-green); }
+
+        /* Pomodoro Timer Widget */
+        .timer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .time-display {
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--accent-blue); color: white; }
+        .btn-primary:hover { background-color: var(--accent-blue-hover); }
+        .btn-success { background-color: var(--accent-green); color: white; }
+        .btn-success:hover { background-color: var(--accent-green-hover); }
+        .btn-outline { background-color: transparent; border: 1px solid var(--border-light); color: var(--text-main); }
+        .btn-outline:hover { background-color: #f1f5f9; }
+
+        /* AI Assistant Widget */
+        .ai-assistant { margin-top: 24px; }
+
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--border-radius);
+            padding: 32px;
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            background-color: #f8fafc;
+            transition: background 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            background-color: #f1f5f9;
+            border-color: var(--accent-blue);
+        }
+
+        .upload-area i { font-size: 2rem; color: var(--accent-blue); margin-bottom: 12px; }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .action-buttons .btn { justify-content: center; font-size: 0.9rem; padding: 12px; }
+
+        .recent-files { margin-top: 20px; }
+        .recent-files h4 { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-light);
+        }
+
+        .file-icon {
+            width: 32px; height: 32px;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 0.8rem;
+        }
+
+        .bg-blue { background-color: var(--accent-blue); }
+        .bg-green { background-color: var(--accent-green); }
+        .bg-yellow { background-color: var(--warning-yellow); }
+
+        .file-details h5 { font-size: 0.9rem; font-weight: 500; }
+        .file-details p { font-size: 0.75rem; color: var(--text-muted); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fa-solid fa-graduation-cap"></i> Studify
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
+            <li class="nav-item"><i class="fa-solid fa-stopwatch"></i> Timers</li>
+            <li class="nav-item"><i class="fa-solid fa-book"></i> Study Materials</li>
+            <li class="nav-item"><i class="fa-solid fa-clipboard-question"></i> Quizzes</li>
+            <li class="nav-item"><i class="fa-solid fa-gear"></i> Settings</li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <h1>Student Dashboard</h1>
+            <div class="user-profile">
+                <span>Alex Johnson</span>
+                <div class="user-avatar">AJ</div>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <div class="welcome-banner">
+                <h2>Welcome back, Alex! 👋</h2>
+                <p>You have 2 upcoming exams this week. Stay focused, you've got this!</p>
+            </div>
+
+            <div class="grid-container">
+                
+                <div class="card left-col">
+                    <div class="card-header">
+                        <i class="fa-regular fa-calendar-check" style="color: var(--accent-blue);"></i> Upcoming Exams
+                    </div>
+                    <ul class="exam-list">
+                        <li class="exam-item">
+                            <div class="exam-info">
+                                <h3>Data Structures Final</h3>
+                                <p>November 15, 2026 • Room 402</p>
+                            </div>
+                            <div class="badge urgent">3 Days Left</div>
+                        </li>
+                        <li class="exam-item">
+                            <div class="exam-info">
+                                <h3>Software Eng. Midterm</h3>
+                                <p>November 18, 2026 • Main Hall</p>
+                            </div>
+                            <div class="badge urgent">6 Days Left</div>
+                        </li>
+                        <li class="exam-item">
+                            <div class="exam-info">
+                                <h3>Linear Algebra Quiz</h3>
+                                <p>November 24, 2026 • Online</p>
+                            </div>
+                            <div class="badge warning">12 Days Left</div>
+                        </li>
+                        <li class="exam-item">
+                            <div class="exam-info">
+                                <h3>Physics II Lab</h3>
+                                <p>December 05, 2026 • Lab B</p>
+                            </div>
+                            <div class="badge safe">23 Days Left</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="right-col">
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fa-solid fa-clock" style="color: var(--accent-green);"></i> Pomodoro Focus Timer
+                        </div>
+                        <div class="timer-container">
+                            <div class="time-display" id="timer-display">25:00</div>
+                            <div class="timer-controls">
+                                <button class="btn btn-success" id="start-btn" onclick="startTimer()">
+                                    <i class="fa-solid fa-play"></i> Start
+                                </button>
+                                <button class="btn btn-outline" id="pause-btn" onclick="pauseTimer()">
+                                    <i class="fa-solid fa-pause"></i> Pause
+                                </button>
+                                <button class="btn btn-outline" onclick="resetTimer()">
+                                    <i class="fa-solid fa-rotate-right"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card ai-assistant">
+                        <div class="card-header">
+                            <i class="fa-solid fa-wand-magic-sparkles" style="color: #8b5cf6;"></i> AI Study Assistant
+                        </div>
+                        
+                        <div class="upload-area">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <h3>Upload Lecture Notes or PDFs</h3>
+                            <p>Drag and drop files here to begin</p>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-outline"><i class="fa-solid fa-sitemap"></i> Mind Map</button>
+                            <button class="btn btn-outline"><i class="fa-solid fa-align-left"></i> Summary</button>
+                            <button class="btn btn-outline"><i class="fa-solid fa-list-check"></i> MCQs</button>
+                        </div>
+
+                        <div class="recent-files">
+                            <h4>Recent Generations</h4>
+                            <div class="file-item">
+                                <div class="file-icon bg-blue"><i class="fa-solid fa-sitemap"></i></div>
+                                <div class="file-details">
+                                    <h5>Data Structures Overview</h5>
+                                    <p>Mind Map • Generated 2 hrs ago</p>
+                                </div>
+                            </div>
+                            <div class="file-item">
+                                <div class="file-icon bg-green"><i class="fa-solid fa-align-left"></i></div>
+                                <div class="file-details">
+                                    <h5>Chapter 4: Sorting Algorithms</h5>
+                                    <p>Text Summary • Generated yesterday</p>
+                                </div>
+                            </div>
+                            <div class="file-item">
+                                <div class="file-icon bg-yellow"><i class="fa-solid fa-list-check"></i></div>
+                                <div class="file-details">
+                                    <h5>Midterm Prep Quiz</h5>
+                                    <p>25 MCQs • Generated 3 days ago</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let timerId = null;
+        const display = document.getElementById('timer-display');
+        const startBtn = document.getElementById('start-btn');
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (timerId === null) {
+                // Change Start button to look active/disabled
+                startBtn.classList.remove('btn-success');
+                startBtn.classList.add('btn-outline');
+                startBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Running';
+                
+                timerId = setInterval(() => {
+                    timeLeft--;
+                    updateDisplay();
+                    if (timeLeft === 0) {
+                        clearInterval(timerId);
+                        timerId = null;
+                        alert("Pomodoro session complete! Take a break.");
+                        resetTimer();
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            if (timerId !== null) {
+                clearInterval(timerId);
+                timerId = null;
+                // Reset Start button appearance
+                startBtn.classList.add('btn-success');
+                startBtn.classList.remove('btn-outline');
+                startBtn.innerHTML = '<i class="fa-solid fa-play"></i> Resume';
+            }
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timeLeft = 25 * 60;
+            updateDisplay();
+            startBtn.innerHTML = '<i class="fa-solid fa-play"></i> Start';
+        }
+
+        // Initialize display on load
+        updateDisplay();
+    </script>
+</body>
+</html>
