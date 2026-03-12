@@ -442,6 +442,42 @@
     </main>
 
     <script>
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all nav items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Get the section name from the nav item text
+                    const sectionName = this.textContent.trim().toLowerCase();
+                    
+                    // Log the navigation (you can expand this with actual page switching)
+                    console.log('Navigating to: ' + sectionName);
+                    
+                    // Update the top bar title
+                    updatePageTitle(sectionName);
+                });
+            });
+        });
+
+        function updatePageTitle(section) {
+            const h1 = document.querySelector('.top-bar h1');
+            const titles = {
+                'dashboard': 'Student Dashboard',
+                'timers': 'Focus Timers',
+                'study materials': 'Study Materials',
+                'quizzes': 'Practice Quizzes',
+                'settings': 'Settings'
+            };
+            h1.textContent = titles[section] || 'Student Dashboard';
+        }
+
         let timeLeft = 25 * 60; // 25 minutes in seconds
         let timerId = null;
         const display = document.getElementById('timer-display');
