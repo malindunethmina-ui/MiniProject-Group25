@@ -297,6 +297,15 @@
         .file-details h5 { font-size: 0.9rem; font-weight: 500; }
         .file-details p { font-size: 0.75rem; color: var(--text-muted); }
 
+        /* Section Display Management */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .grid-container { grid-template-columns: 1fr; }
@@ -328,114 +337,141 @@
         </header>
 
         <div class="content-area">
-            <div class="welcome-banner">
-                <h2>Welcome back, Alex! 👋</h2>
-                <p>You have 2 upcoming exams this week. Stay focused, you've got this!</p>
-            </div>
-
-            <div class="grid-container">
-                
-                <div class="card left-col">
-                    <div class="card-header">
-                        <i class="fa-regular fa-calendar-check" style="color: var(--accent-blue);"></i> Upcoming Exams
-                    </div>
-                    <ul class="exam-list">
-                        <li class="exam-item">
-                            <div class="exam-info">
-                                <h3>Data Structures Final</h3>
-                                <p>November 15, 2026 • Room 402</p>
-                            </div>
-                            <div class="badge urgent">3 Days Left</div>
-                        </li>
-                        <li class="exam-item">
-                            <div class="exam-info">
-                                <h3>Software Eng. Midterm</h3>
-                                <p>November 18, 2026 • Main Hall</p>
-                            </div>
-                            <div class="badge urgent">6 Days Left</div>
-                        </li>
-                        <li class="exam-item">
-                            <div class="exam-info">
-                                <h3>Linear Algebra Quiz</h3>
-                                <p>November 24, 2026 • Online</p>
-                            </div>
-                            <div class="badge warning">12 Days Left</div>
-                        </li>
-                        <li class="exam-item">
-                            <div class="exam-info">
-                                <h3>Physics II Lab</h3>
-                                <p>December 05, 2026 • Lab B</p>
-                            </div>
-                            <div class="badge safe">23 Days Left</div>
-                        </li>
-                    </ul>
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <div class="welcome-banner">
+                    <h2>Welcome back, Alex! 👋</h2>
+                    <p>You have 2 upcoming exams this week. Stay focused, you've got this!</p>
                 </div>
 
-                <div class="right-col">
-                    
-                    <div class="card">
+                <div class="grid-container">
+                    <div class="card left-col">
                         <div class="card-header">
-                            <i class="fa-solid fa-clock" style="color: var(--accent-green);"></i> Pomodoro Focus Timer
+                            <i class="fa-regular fa-calendar-check" style="color: var(--accent-blue);"></i> Upcoming Exams
                         </div>
-                        <div class="timer-container">
-                            <div class="time-display" id="timer-display">25:00</div>
-                            <div class="timer-controls">
-                                <button class="btn btn-success" id="start-btn" onclick="startTimer()">
-                                    <i class="fa-solid fa-play"></i> Start
-                                </button>
-                                <button class="btn btn-outline" id="pause-btn" onclick="pauseTimer()">
-                                    <i class="fa-solid fa-pause"></i> Pause
-                                </button>
-                                <button class="btn btn-outline" onclick="resetTimer()">
-                                    <i class="fa-solid fa-rotate-right"></i> Reset
-                                </button>
+                        <ul class="exam-list">
+                            <li class="exam-item">
+                                <div class="exam-info">
+                                    <h3>Data Structures Final</h3>
+                                    <p>November 15, 2026 • Room 402</p>
+                                </div>
+                                <div class="badge urgent">3 Days Left</div>
+                            </li>
+                            <li class="exam-item">
+                                <div class="exam-info">
+                                    <h3>Software Eng. Midterm</h3>
+                                    <p>November 18, 2026 • Main Hall</p>
+                                </div>
+                                <div class="badge urgent">6 Days Left</div>
+                            </li>
+                            <li class="exam-item">
+                                <div class="exam-info">
+                                    <h3>Linear Algebra Quiz</h3>
+                                    <p>November 24, 2026 • Online</p>
+                                </div>
+                                <div class="badge warning">12 Days Left</div>
+                            </li>
+                            <li class="exam-item">
+                                <div class="exam-info">
+                                    <h3>Physics II Lab</h3>
+                                    <p>December 05, 2026 • Lab B</p>
+                                </div>
+                                <div class="badge safe">23 Days Left</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="right-col">
+                        <div class="card ai-assistant">
+                            <div class="card-header">
+                                <i class="fa-solid fa-wand-magic-sparkles" style="color: #8b5cf6;"></i> AI Study Assistant
+                            </div>
+                            
+                            <div class="upload-area">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <h3>Upload Lecture Notes or PDFs</h3>
+                                <p>Drag and drop files here to begin</p>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="btn btn-outline"><i class="fa-solid fa-sitemap"></i> Mind Map</button>
+                                <button class="btn btn-outline"><i class="fa-solid fa-align-left"></i> Summary</button>
+                                <button class="btn btn-outline"><i class="fa-solid fa-list-check"></i> MCQs</button>
+                            </div>
+
+                            <div class="recent-files">
+                                <h4>Recent Generations</h4>
+                                <div class="file-item">
+                                    <div class="file-icon bg-blue"><i class="fa-solid fa-sitemap"></i></div>
+                                    <div class="file-details">
+                                        <h5>Data Structures Overview</h5>
+                                        <p>Mind Map • Generated 2 hrs ago</p>
+                                    </div>
+                                </div>
+                                <div class="file-item">
+                                    <div class="file-icon bg-green"><i class="fa-solid fa-align-left"></i></div>
+                                    <div class="file-details">
+                                        <h5>Chapter 4: Sorting Algorithms</h5>
+                                        <p>Text Summary • Generated yesterday</p>
+                                    </div>
+                                </div>
+                                <div class="file-item">
+                                    <div class="file-icon bg-yellow"><i class="fa-solid fa-list-check"></i></div>
+                                    <div class="file-details">
+                                        <h5>Midterm Prep Quiz</h5>
+                                        <p>25 MCQs • Generated 3 days ago</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="card ai-assistant">
-                        <div class="card-header">
-                            <i class="fa-solid fa-wand-magic-sparkles" style="color: #8b5cf6;"></i> AI Study Assistant
-                        </div>
-                        
-                        <div class="upload-area">
-                            <i class="fa-solid fa-cloud-arrow-up"></i>
-                            <h3>Upload Lecture Notes or PDFs</h3>
-                            <p>Drag and drop files here to begin</p>
-                        </div>
-
-                        <div class="action-buttons">
-                            <button class="btn btn-outline"><i class="fa-solid fa-sitemap"></i> Mind Map</button>
-                            <button class="btn btn-outline"><i class="fa-solid fa-align-left"></i> Summary</button>
-                            <button class="btn btn-outline"><i class="fa-solid fa-list-check"></i> MCQs</button>
-                        </div>
-
-                        <div class="recent-files">
-                            <h4>Recent Generations</h4>
-                            <div class="file-item">
-                                <div class="file-icon bg-blue"><i class="fa-solid fa-sitemap"></i></div>
-                                <div class="file-details">
-                                    <h5>Data Structures Overview</h5>
-                                    <p>Mind Map • Generated 2 hrs ago</p>
-                                </div>
-                            </div>
-                            <div class="file-item">
-                                <div class="file-icon bg-green"><i class="fa-solid fa-align-left"></i></div>
-                                <div class="file-details">
-                                    <h5>Chapter 4: Sorting Algorithms</h5>
-                                    <p>Text Summary • Generated yesterday</p>
-                                </div>
-                            </div>
-                            <div class="file-item">
-                                <div class="file-icon bg-yellow"><i class="fa-solid fa-list-check"></i></div>
-                                <div class="file-details">
-                                    <h5>Midterm Prep Quiz</h5>
-                                    <p>25 MCQs • Generated 3 days ago</p>
-                                </div>
-                            </div>
-                        </div>
-
+            <!-- Timers Section -->
+            <div id="timers" class="section">
+                <div class="card" style="max-width: 500px; margin: 0 auto;">
+                    <div class="card-header">
+                        <i class="fa-solid fa-clock" style="color: var(--accent-green);"></i> Pomodoro Focus Timer
                     </div>
+                    <div class="timer-container">
+                        <div class="time-display" id="timer-display">25:00</div>
+                        <div class="timer-controls">
+                            <button class="btn btn-success" id="start-btn" onclick="startTimer()">
+                                <i class="fa-solid fa-play"></i> Start
+                            </button>
+                            <button class="btn btn-outline" id="pause-btn" onclick="pauseTimer()">
+                                <i class="fa-solid fa-pause"></i> Pause
+                            </button>
+                            <button class="btn btn-outline" onclick="resetTimer()">
+                                <i class="fa-solid fa-rotate-right"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Study Materials Section -->
+            <div id="study materials" class="section">
+                <div class="card">
+                    <div class="card-header"><i class="fa-solid fa-book"></i> Study Materials</div>
+                    <p style="padding: 20px; text-align: center; color: var(--text-muted);">Study materials coming soon...</p>
+                </div>
+            </div>
+
+            <!-- Quizzes Section -->
+            <div id="quizzes" class="section">
+                <div class="card">
+                    <div class="card-header"><i class="fa-solid fa-clipboard-question"></i> Practice Quizzes</div>
+                    <p style="padding: 20px; text-align: center; color: var(--text-muted);">Quizzes coming soon...</p>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="section">
+                <div class="card">
+                    <div class="card-header"><i class="fa-solid fa-gear"></i> Settings</div>
+                    <p style="padding: 20px; text-align: center; color: var(--text-muted);">Settings coming soon...</p>
                 </div>
             </div>
         </div>
@@ -457,8 +493,15 @@
                     // Get the section name from the nav item text
                     const sectionName = this.textContent.trim().toLowerCase();
                     
-                    // Log the navigation (you can expand this with actual page switching)
-                    console.log('Navigating to: ' + sectionName);
+                    // Hide all sections
+                    const sections = document.querySelectorAll('.section');
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Show the selected section
+                    const selectedSection = document.getElementById(sectionName);
+                    if (selectedSection) {
+                        selectedSection.classList.add('active');
+                    }
                     
                     // Update the top bar title
                     updatePageTitle(sectionName);
