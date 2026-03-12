@@ -1,0 +1,18 @@
+Base Prompt:
+
+Write the HTML, CSS, and JavaScript for an "Exam Countdown & Study Timer" web application targeted at university students. The design must be a clean, modern dashboard heavily inspired by professional financial trackers, but adapted for studying.
+Layout & UI Requirements:
+
+Sidebar: A left-hand vertical navigation menu with icons for: Dashboard, Timers, Study Materials, Quizzes, and Settings.
+Top Bar: A simple header titled "Student Dashboard" with a mock user profile icon.
+Welcome Banner: A top-spanning card in the main area welcoming the student with a brief motivational message.
+Grid Layout: Below the banner, split the main content area into two columns (similar to a 40/60 split).
+Visual Styling: The interface must look clean and readable. Use generous padding, soft shadows on cards, a light gray background for the main canvas, and a crisp white background for the widgets. Use a visually appealing modern color palette (e.g., soft blues and greens). Ensure all buttons have smooth hover effects and rounded corners.
+Functionality & Widgets (Main Content Area):
+
+Left Column - Exam Countdown (List Layout): Create a clean, clear list layout displaying upcoming exams (e.g., "Data Structures Final", "Software Engineering Midterm"). Include dummy dates, a badge showing the days remaining, and color-code them based on urgency (e.g., red for exams within 7 days).
+Right Column Top - Pomodoro Study Timer: A functional Pomodoro timer widget. It should display a large clock (e.g., 25:00) with visually appealing "Start", "Pause", and "Reset" buttons.
+Right Column Bottom - AI Study Assistant Mockup: A widget designed for AI generation. It should include:
+A drag-and-drop/file upload area labeled "Upload Lecture Notes or PDFs".
+A set of three modern action buttons underneath: "Generate Mind Map", "Generate Summary", and "Generate MCQs".
+A "Recent Files" or "Generated Content" list below the buttons, showing mock generated outputs with small icons representing mind maps, text summaries, and quizzes.
