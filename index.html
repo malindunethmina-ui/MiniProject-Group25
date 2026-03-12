@@ -25,6 +25,15 @@
             --border-light: #e2e8f0;
             --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
             --border-radius: 12px;
+            --bg-hover-light: rgba(255,255,255,0.05);
+            --bg-light-secondary: #f8fafc;
+            --bg-light-tertiary: #f1f5f9;
+            --bg-settings-menu: #f8fafc;
+            --bg-settings-hover: #eef2f5;
+            --bg-settings-active: #e0f2fe;
+            --badge-urgent-bg: #fef2f2;
+            --badge-warning-bg: #fffbeb;
+            --badge-safe-bg: #ecfdf5;
         }
 
         * {
@@ -59,7 +68,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border-light);
             color: var(--accent-blue);
         }
 
@@ -76,11 +85,11 @@
             gap: 16px;
             cursor: pointer;
             transition: background 0.2s, color 0.2s;
-            color: #cbd5e1;
+            color: var(--text-muted);
         }
 
         .nav-item:hover, .nav-item.active {
-            background-color: rgba(255,255,255,0.05);
+            background-color: var(--bg-hover-light);
             color: var(--text-light);
             border-left: 4px solid var(--accent-blue);
         }
@@ -131,7 +140,7 @@
 
         /* Welcome Banner */
         .welcome-banner {
-            background: linear-gradient(135deg, var(--accent-blue), #60a5fa);
+            background: linear-gradient(135deg, var(--accent-blue), #2563eb);
             color: white;
             padding: 24px 32px;
             border-radius: var(--border-radius);
@@ -191,9 +200,9 @@
             font-weight: 600;
         }
         
-        .badge.urgent { background-color: #fef2f2; color: var(--danger-red); }
-        .badge.warning { background-color: #fffbeb; color: var(--warning-yellow); }
-        .badge.safe { background-color: #ecfdf5; color: var(--accent-green); }
+        .badge.urgent { background-color: var(--badge-urgent-bg); color: var(--danger-red); }
+        .badge.warning { background-color: var(--badge-warning-bg); color: var(--warning-yellow); }
+        .badge.safe { background-color: var(--badge-safe-bg); color: var(--accent-green); }
 
         /* Pomodoro Timer Widget */
         .timer-container {
@@ -236,25 +245,25 @@
         .btn-success { background-color: var(--accent-green); color: white; }
         .btn-success:hover { background-color: var(--accent-green-hover); }
         .btn-outline { background-color: transparent; border: 1px solid var(--border-light); color: var(--text-main); }
-        .btn-outline:hover { background-color: #f1f5f9; }
+        .btn-outline:hover { background-color: var(--bg-light-tertiary); }
 
         /* AI Assistant Widget */
         .ai-assistant { margin-top: 24px; }
 
         .upload-area {
-            border: 2px dashed #cbd5e1;
+            border: 2px dashed var(--text-muted);
             border-radius: var(--border-radius);
             padding: 32px;
             text-align: center;
             color: var(--text-muted);
             margin-bottom: 20px;
-            background-color: #f8fafc;
+            background-color: var(--bg-light-secondary);
             transition: background 0.2s, border-color 0.2s;
             cursor: pointer;
         }
 
         .upload-area:hover {
-            background-color: #f1f5f9;
+            background-color: var(--bg-light-tertiary);
             border-color: var(--accent-blue);
         }
 
@@ -278,7 +287,7 @@
             gap: 12px;
             padding: 10px;
             border-radius: 8px;
-            background-color: #f8fafc;
+            background-color: var(--bg-light-secondary);
             margin-bottom: 8px;
             border: 1px solid var(--border-light);
         }
@@ -296,6 +305,180 @@
 
         .file-details h5 { font-size: 0.9rem; font-weight: 500; }
         .file-details p { font-size: 0.75rem; color: var(--text-muted); }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: var(--text-main);
+            background-color: var(--bg-light-secondary);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background-color: var(--bg-card);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .profile-section {
+            max-width: 600px;
+        }
+
+        .profile-avatar-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .large-avatar {
+            width: 100px;
+            height: 100px;
+            background-color: var(--accent-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .avatar-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+
+        .avatar-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Settings Panel Styling */
+        .settings-container {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 24px;
+            max-width: 900px;
+        }
+
+        .settings-menu {
+            list-style: none;
+            padding: 0;
+            background-color: var(--bg-settings-menu);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .settings-menu-item {
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            border-left: 4px solid transparent;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .settings-menu-item:hover {
+            background-color: var(--bg-settings-hover);
+        }
+
+        .settings-menu-item.active {
+            background-color: var(--bg-settings-active);
+            color: var(--accent-blue);
+            border-left-color: var(--accent-blue);
+        }
+
+        .settings-content {
+            display: none;
+        }
+
+        .settings-content.active {
+            display: block;
+        }
+
+        .settings-panel {
+            background-color: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            border: 1px solid var(--border-light);
+        }
+
+        .settings-panel h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+        }
+
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .theme-option {
+            padding: 16px;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-option:hover {
+            border-color: var(--accent-blue);
+            background-color: var(--bg-light-secondary);
+        }
+
+        .theme-option.active {
+            border-color: var(--accent-blue);
+            background-color: var(--bg-settings-active);
+            color: var(--accent-blue);
+        }
+
+        .theme-option i {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .theme-option p {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
 
         /* Section Display Management */
         .section {
@@ -469,15 +652,219 @@
 
             <!-- Settings Section -->
             <div id="settings" class="section">
-                <div class="card">
-                    <div class="card-header"><i class="fa-solid fa-gear"></i> Settings</div>
-                    <p style="padding: 20px; text-align: center; color: var(--text-muted);">Settings coming soon...</p>
+                <div class="settings-container">
+                    <!-- Settings Menu -->
+                    <ul class="settings-menu">
+                        <li class="settings-menu-item active" data-setting="profile">
+                            <i class="fa-solid fa-user"></i> Profile
+                        </li>
+                        <li class="settings-menu-item" data-setting="theme">
+                            <i class="fa-solid fa-palette"></i> Theme
+                        </li>
+                    </ul>
+
+                    <!-- Settings Content -->
+                    <div class="settings-panels">
+                        <!-- Profile Settings -->
+                        <div class="settings-content active" id="profile-setting">
+                            <div class="settings-panel">
+                                <h3><i class="fa-solid fa-user"></i> Student Profile</h3>
+                                
+                                <div class="profile-avatar-section">
+                                    <div class="large-avatar" id="profile-avatar">AJ</div>
+                                    <div class="avatar-info">
+                                        <h3 id="profile-name-display">Alex Johnson</h3>
+                                        <p>Student Account</p>
+                                    </div>
+                                </div>
+
+                                <form id="profile-form">
+                                    <div class="form-group">
+                                        <label for="student-name">Full Name *</label>
+                                        <input type="text" id="student-name" name="name" placeholder="Enter your full name" required value="Alex Johnson">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="student-bio">Bio</label>
+                                        <textarea id="student-bio" name="bio" placeholder="Tell us about yourself..."></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="student-email">Email</label>
+                                        <input type="email" id="student-email" name="email" placeholder="Enter your email address">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="student-major">Major/Field of Study</label>
+                                        <input type="text" id="student-major" name="major" placeholder="Enter your major">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" style="align-self: flex-start; margin-top: 10px;">
+                                        <i class="fa-solid fa-save"></i> Save Profile
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Theme Settings -->
+                        <div class="settings-content" id="theme-setting">
+                            <div class="settings-panel">
+                                <h3><i class="fa-solid fa-palette"></i> Theme Preference</h3>
+                                
+                                <div class="theme-options">
+                                    <div class="theme-option active" data-theme="light">
+                                        <i class="fa-solid fa-sun"></i>
+                                        <p>Light</p>
+                                    </div>
+                                    <div class="theme-option" data-theme="dark">
+                                        <i class="fa-solid fa-moon"></i>
+                                        <p>Dark</p>
+                                    </div>
+                                    <div class="theme-option" data-theme="system">
+                                        <i class="fa-solid fa-circle-half-stroke"></i>
+                                        <p>System</p>
+                                    </div>
+                                </div>
+
+                                <p style="margin-top: 20px; color: var(--text-muted); font-size: 0.9rem;">
+                                    <i class="fa-solid fa-info-circle"></i> Changes are applied immediately
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
+        // Profile Management
+        class ProfileManager {
+            constructor() {
+                this.storageKey = 'studentProfile';
+                this.loadProfile();
+            }
+
+            loadProfile() {
+                const saved = localStorage.getItem(this.storageKey);
+                this.profile = saved ? JSON.parse(saved) : {
+                    name: 'Alex Johnson',
+                    bio: '',
+                    email: '',
+                    major: ''
+                };
+                this.updateUI();
+            }
+
+            saveProfile(data) {
+                this.profile = { ...this.profile, ...data };
+                localStorage.setItem(this.storageKey, JSON.stringify(this.profile));
+                this.updateUI();
+            }
+
+            updateUI() {
+                // Update top-right profile
+                document.querySelector('.user-profile span').textContent = this.profile.name;
+                
+                // Update avatar initials
+                const initials = this.profile.name
+                    .split(' ')
+                    .map(word => word[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2);
+                document.querySelector('.user-avatar').textContent = initials;
+                document.getElementById('profile-avatar').textContent = initials;
+                
+                // Update welcome message with first name
+                const firstName = this.profile.name.split(' ')[0];
+                document.querySelector('.welcome-banner h2').textContent = `Welcome back, ${firstName}! 👋`;
+                
+                // Update profile display in settings
+                document.getElementById('profile-name-display').textContent = this.profile.name;
+                
+                // Update form fields
+                document.getElementById('student-name').value = this.profile.name;
+                document.getElementById('student-bio').value = this.profile.bio;
+                document.getElementById('student-email').value = this.profile.email;
+                document.getElementById('student-major').value = this.profile.major;
+            }
+        }
+
+        const profileManager = new ProfileManager();
+
+        // Theme Manager
+        class ThemeManager {
+            constructor() {
+                this.storageKey = 'appTheme';
+                this.loadTheme();
+            }
+
+            loadTheme() {
+                const saved = localStorage.getItem(this.storageKey) || 'light';
+                this.currentTheme = saved;
+                this.applyTheme(saved);
+            }
+
+            applyTheme(theme) {
+                const root = document.documentElement;
+                
+                if (theme === 'system') {
+                    // Detect system preference
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    theme = prefersDark ? 'dark' : 'light';
+                }
+
+                if (theme === 'dark') {
+                    // Dark theme
+                    root.style.setProperty('--bg-canvas', '#0f172a');
+                    root.style.setProperty('--bg-card', '#1e293b');
+                    root.style.setProperty('--bg-sidebar', '#0f172a');
+                    root.style.setProperty('--text-main', '#f1f5f9');
+                    root.style.setProperty('--text-muted', '#94a3b8');
+                    root.style.setProperty('--text-light', '#f8fafc');
+                    root.style.setProperty('--border-light', '#334155');
+                    root.style.setProperty('--bg-hover-light', 'rgba(100,116,139,0.2)');
+                    root.style.setProperty('--bg-light-secondary', '#334155');
+                    root.style.setProperty('--bg-light-tertiary', '#475569');
+                    root.style.setProperty('--bg-settings-menu', '#334155');
+                    root.style.setProperty('--bg-settings-hover', '#475569');
+                    root.style.setProperty('--bg-settings-active', '#1e3a8a');
+                    root.style.setProperty('--badge-urgent-bg', '#7f1d1d');
+                    root.style.setProperty('--badge-warning-bg', '#7c2d12');
+                    root.style.setProperty('--badge-safe-bg', '#064e3b');
+                } else {
+                    // Light theme (default)
+                    root.style.setProperty('--bg-canvas', '#f4f7f8');
+                    root.style.setProperty('--bg-card', '#ffffff');
+                    root.style.setProperty('--bg-sidebar', '#1e293b');
+                    root.style.setProperty('--text-main', '#334155');
+                    root.style.setProperty('--text-muted', '#64748b');
+                    root.style.setProperty('--text-light', '#f8fafc');
+                    root.style.setProperty('--border-light', '#e2e8f0');
+                    root.style.setProperty('--bg-hover-light', 'rgba(255,255,255,0.05)');
+                    root.style.setProperty('--bg-light-secondary', '#f8fafc');
+                    root.style.setProperty('--bg-light-tertiary', '#f1f5f9');
+                    root.style.setProperty('--bg-settings-menu', '#f8fafc');
+                    root.style.setProperty('--bg-settings-hover', '#eef2f5');
+                    root.style.setProperty('--bg-settings-active', '#e0f2fe');
+                    root.style.setProperty('--badge-urgent-bg', '#fef2f2');
+                    root.style.setProperty('--badge-warning-bg', '#fffbeb');
+                    root.style.setProperty('--badge-safe-bg', '#ecfdf5');
+                }
+
+                this.currentTheme = this.storageKey === 'system' ? 'system' : theme;
+            }
+
+            setTheme(theme) {
+                this.currentTheme = theme;
+                localStorage.setItem(this.storageKey, theme);
+                this.applyTheme(theme);
+            }
+        }
+
+        const themeManager = new ThemeManager();
+
         // Navigation functionality
         document.addEventListener('DOMContentLoaded', function() {
             const navItems = document.querySelectorAll('.nav-item');
@@ -520,6 +907,73 @@
             };
             h1.textContent = titles[section] || 'Student Dashboard';
         }
+
+        // Profile Form Submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileForm = document.getElementById('profile-form');
+            if (profileForm) {
+                profileForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const profileData = {
+                        name: document.getElementById('student-name').value,
+                        bio: document.getElementById('student-bio').value,
+                        email: document.getElementById('student-email').value,
+                        major: document.getElementById('student-major').value
+                    };
+                    
+                    profileManager.saveProfile(profileData);
+                    
+                    // Show save confirmation
+                    alert('Profile saved successfully!');
+                });
+            }
+
+            // Settings Menu Switching
+            const settingsMenuItems = document.querySelectorAll('.settings-menu-item');
+            settingsMenuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const settingName = this.getAttribute('data-setting');
+                    
+                    // Remove active from all menu items
+                    settingsMenuItems.forEach(menu => menu.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Hide all settings content
+                    const settingsContents = document.querySelectorAll('.settings-content');
+                    settingsContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Show selected settings content
+                    const selectedContent = document.getElementById(settingName + '-setting');
+                    if (selectedContent) {
+                        selectedContent.classList.add('active');
+                    }
+                });
+            });
+
+            // Theme Selection
+            const themeOptions = document.querySelectorAll('.theme-option');
+            themeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    
+                    // Remove active from all theme options
+                    themeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Apply theme
+                    themeManager.setTheme(theme);
+                });
+            });
+
+            // Set initial theme option
+            const currentTheme = themeManager.currentTheme;
+            const initialThemeOption = document.querySelector(`[data-theme="${currentTheme}"]`);
+            if (initialThemeOption) {
+                themeOptions.forEach(opt => opt.classList.remove('active'));
+                initialThemeOption.classList.add('active');
+            }
+        });
 
         let timeLeft = 25 * 60; // 25 minutes in seconds
         let timerId = null;
