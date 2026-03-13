@@ -1,29 +1,43 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studify | Budget Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --accent-blue: #3b82f6;
-            --accent-green: #10b981;
+            --accent-blue: #10b981;
+            --accent-green: #22c55e;
             --accent-yellow: #f59e0b;
             --accent-red: #ef4444;
-            --bg-color: #f8fafc;
+            --bg-color: #f0fdf4;
             --card-bg: #ffffff;
             --sidebar-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-secondary: #64748b;
-            --border: #e2e8f0;
+            --text-main: #064e3b;
+            --text-secondary: #065f46;
+            --border: #d1fae5;
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --sidebar-width: 240px;
+            --transition-speed: 0.3s;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #061712;
+            --card-bg: #0a261f;
+            --sidebar-bg: #0a261f;
+            --text-main: #ecfdf5;
+            --text-secondary: #a7f3d0;
+            --border: #115e59;
+            --accent-blue: #34d399;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
         }
 
         body {
@@ -46,6 +60,7 @@
             position: fixed;
             height: 100vh;
             z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar-brand {
@@ -56,6 +71,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            animation: slideInDown 0.5s ease-out;
         }
 
         .nav-links {
@@ -75,18 +91,43 @@
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-item:hover {
             background: #f1f5f9;
             color: var(--text-main);
+            transform: translateX(4px);
         }
 
         .nav-item.active {
             background: #eff6ff;
             color: var(--accent-blue);
         }
+
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideInDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.98); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
 
         .sidebar-footer {
             margin-top: auto;
@@ -112,6 +153,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            animation: slideInDown 0.5s ease-out;
         }
 
         h1 {
@@ -137,8 +179,14 @@
             background: var(--card-bg);
             padding: 1.5rem;
             border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
         }
 
         .card h3 {
@@ -181,7 +229,54 @@
         .progress-bar {
             height: 100%;
             width: 0%;
-            transition: width 0.5s ease, background-color 0.5s ease;
+            transition: width 1s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.5s ease;
+        }
+
+        /* Toggle Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-blue);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
         }
 
         /* Conditional Progress Styling */
@@ -333,10 +428,14 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        .empty-state {
-            padding: 2rem;
-            text-align: center;
-            color: var(--text-secondary);
+        .stat-card:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s;
+        }
+
+        .stat-card.active {
+            outline: 2px solid var(--accent-blue);
+            box-shadow: 0 8px 12px -1px rgba(0, 0, 0, 0.15);
         }
 
         .tab-content {
@@ -372,8 +471,17 @@
             .btn-add { grid-column: span 2; }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
+<div style="position: fixed; top: 1rem; right: 1.5rem; z-index: 1000; display: flex; align-items: center; gap: 0.5rem; background: var(--card-bg); padding: 0.5rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+    <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">🌙</span>
+    <label class="switch">
+        <input type="checkbox" id="headerThemeToggle">
+        <span class="slider"></span>
+    </label>
+</div>
 
 <nav class="sidebar">
     <div class="sidebar-brand">
@@ -382,6 +490,7 @@
     </div>
     <ul class="nav-links" id="sidebarNav">
         <li><a href="#" class="nav-item active" data-tab="dashboard">📊 Dashboard</a></li>
+        <li><a href="#" class="nav-item" data-tab="categories">🏷️ Categories</a></li>
         <li><a href="#" class="nav-item" data-tab="analytics">📈 Analytics</a></li>
         <li><a href="#" class="nav-item" data-tab="budgets">💰 Budgets</a></li>
         <li><a href="#" class="nav-item" data-tab="settings">⚙️ Settings</a></li>
@@ -399,7 +508,7 @@
             <div id="currentMonth" class="date-display">March 2026</div>
         </div>
         <div class="allowance-control">
-            <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">Monthly Budget ($)</label>
+            <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">Monthly Budget <span class="currency-symbol-label">($)</span></label>
             <input type="number" id="monthlyAllowance" value="1000" style="width: 100px; margin-left: 0.5rem;">
         </div>
     </header>
@@ -407,15 +516,15 @@
     <!-- Dashboard Tab -->
     <div id="dashboard" class="tab-content active">
         <div class="summary-grid">
-            <div class="card">
+            <div class="card animate-fade-in">
                 <h3>Remaining Balance</h3>
                 <div class="value" id="remainingBalance">$0.00</div>
             </div>
-            <div class="card safe-to-spend">
+            <div class="card safe-to-spend animate-fade-in delay-1">
                 <h3>Daily Safe-to-Spend</h3>
                 <div class="value" id="safeToSpend">$0.00</div>
             </div>
-            <div class="card">
+            <div class="card animate-fade-in delay-2">
                 <h3>Total Spent</h3>
                 <div class="value" id="totalSpent">$0.00</div>
             </div>
@@ -439,7 +548,7 @@
                     <input type="text" id="desc" placeholder="e.g. Textbooks" required>
                 </div>
                 <div class="form-group">
-                    <label>Amount ($)</label>
+                    <label>Amount <span class="currency-symbol-label">($)</span></label>
                     <input type="number" id="amount" step="0.01" placeholder="0.00" required>
                 </div>
                 <div class="form-group">
@@ -483,37 +592,69 @@
         </div>
     </div>
 
+    <!-- Categories Tab -->
+    <div id="categories" class="tab-content">
+        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Category Management</h3>
+        <div class="card" style="margin-bottom: 2rem;">
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Add or remove categories for your transactions.</p>
+            
+            <form id="categoryForm" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                <input type="text" id="newCategoryName" placeholder="New Category Name (e.g. Entertainment)" required style="flex: 1;">
+                <button type="submit" class="btn-add">Add Category</button>
+            </form>
+
+            <div id="categoryListDisplay" style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                <!-- Categories will be listed here as tags with delete buttons -->
+            </div>
+        </div>
+
+        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Budget Settings</h3>
+        <div class="card">
+            <p style="color: var(--text-secondary);">Manage your monthly allowance and set category-specific limits here.</p>
+        </div>
+    </div>
+
     <!-- Analytics Tab -->
     <div id="analytics" class="tab-content">
         <h3 style="margin-bottom: 1rem; font-size: 1rem;">Spending Analytics</h3>
-        <div class="summary-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 2rem;">
-            <div class="card" style="border-left: 4px solid var(--accent-blue);">
+        <div class="summary-grid analytics-filters" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 2rem;">
+            <div class="card stat-card active" data-range="today" style="border-left: 4px solid var(--accent-blue); cursor: pointer;">
                 <h3>Today</h3>
                 <div class="value" id="spendToday">$0.00</div>
             </div>
-            <div class="card" style="border-left: 4px solid var(--accent-green);">
+            <div class="card stat-card" data-range="week" style="border-left: 4px solid var(--accent-green); cursor: pointer;">
                 <h3>This Week</h3>
                 <div class="value" id="spendWeek">$0.00</div>
             </div>
-            <div class="card" style="border-left: 4px solid var(--accent-yellow);">
+            <div class="card stat-card" data-range="month" style="border-left: 4px solid var(--accent-yellow); cursor: pointer;">
                 <h3>This Month</h3>
                 <div class="value" id="spendMonth">$0.00</div>
             </div>
-            <div class="card" style="border-left: 4px solid var(--accent-red);">
+            <div class="card stat-card" data-range="year" style="border-left: 4px solid var(--accent-red); cursor: pointer;">
                 <h3>This Year</h3>
                 <div class="value" id="spendYear">$0.00</div>
             </div>
         </div>
-        <!-- More detailed charts can go here -->
-        <div class="card">
-            <h3>Spending Insights</h3>
-            <p style="color: var(--text-secondary); margin-top: 1rem;">Detailed charts and category breakdowns coming soon!</p>
+        <!-- More detailed charts -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+            <div class="card">
+                <h3>Spending by Category</h3>
+                <div style="height: 300px; position: relative;">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Weekly Trend</h3>
+                <div style="height: 300px; position: relative;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Budgets Tab -->
     <div id="budgets" class="tab-content">
-        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Budget Management</h3>
+        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Budget Settings</h3>
         <div class="card">
             <p style="color: var(--text-secondary);">Manage your monthly allowance and set category-specific limits here.</p>
         </div>
@@ -521,9 +662,35 @@
 
     <!-- Settings Tab -->
     <div id="settings" class="tab-content">
-        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Settings</h3>
+        <h3 style="margin-bottom: 1rem; font-size: 1rem;">General Settings</h3>
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label>Base Currency</label>
+                <select id="baseCurrencySelector" style="width: 100%;">
+                    <option value="USD">USD - US Dollar ($)</option>
+                    <option value="LKR">LKR - Sri Lankan Rupee (Rs)</option>
+                    <option value="INR">INR - Indian Rupee (₹)</option>
+                    <option value="EUR">EUR - Euro (€)</option>
+                </select>
+                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                    Changing the currency will convert all your existing transactions and budget to the new currency.
+                </p>
+            </div>
+            <button class="btn-add" id="saveSettingsBtn" style="width: 100%;">Apply & Convert</button>
+        </div>
+
+        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Appearance</h3>
         <div class="card">
-            <p style="color: var(--text-secondary);">Customize your dashboard experience.</p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <p style="font-weight: 600;">Dark Mode</p>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary);">Switch between light and dark themes</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
     </div>
     </div>
@@ -535,9 +702,23 @@
     // --- State Management ---
     let state = {
         transactions: [],
+        categories: ['Edu', 'Food', 'Transport', 'Other'],
         allowance: 1000,
-        currentFilter: 'All'
+        currency: 'USD',
+        theme: 'light',
+        currentFilter: 'All',
+        selectedRange: 'week'
     };
+
+    const currencyConfig = {
+        USD: { symbol: '$', rate: 1 },
+        LKR: { symbol: 'Rs', rate: 300 },
+        INR: { symbol: '₹', rate: 83 },
+        EUR: { symbol: '€', rate: 0.92 }
+    };
+
+    let categoryChart = null;
+    let trendChart = null;
 
     // --- Initialization ---
     function init() {
@@ -545,18 +726,299 @@
         if (savedData) {
             const parsed = JSON.parse(savedData);
             state.transactions = parsed.transactions || [];
+            state.categories = parsed.categories || ['Edu', 'Food', 'Transport', 'Other'];
             state.allowance = parsed.allowance || 1000;
+            state.currency = parsed.currency || 'USD';
+            state.theme = parsed.theme || 'light';
         }
         
         document.getElementById('monthlyAllowance').value = state.allowance;
+        document.getElementById('baseCurrencySelector').value = state.currency;
+        document.documentElement.setAttribute('data-theme', state.theme);
+        updateThemeSwitch();
+        
         updateDate();
+        initCharts();
         updateUI();
+        renderCategoryManagement();
+        updateCategoryDropdowns();
+        updateCurrencyLabels();
+    }
+
+    function toggleTheme() {
+        state.theme = state.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', state.theme);
+        updateThemeSwitch();
+        saveState();
+        showToast(`Theme switched to ${state.theme}`, "info");
+    }
+
+    function updateThemeSwitch() {
+        const toggle = document.getElementById('themeToggle');
+        const headerToggle = document.getElementById('headerThemeToggle');
+        const isDark = (state.theme === 'dark');
+        if (toggle) toggle.checked = isDark;
+        if (headerToggle) headerToggle.checked = isDark;
+    }
+
+    function formatCurrency(amount) {
+        const config = currencyConfig[state.currency];
+        return `${config.symbol}${amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+
+    function updateCurrencyLabels() {
+        const symbol = currencyConfig[state.currency].symbol;
+        document.querySelectorAll('.currency-symbol-label').forEach(el => {
+            el.textContent = `(${symbol})`;
+        });
+    }
+
+    function changeCurrency() {
+        const newCurrency = document.getElementById('baseCurrencySelector').value;
+        if (newCurrency === state.currency) return;
+
+        const oldRate = currencyConfig[state.currency].rate;
+        const newRate = currencyConfig[newCurrency].rate;
+        
+        // Convert allowance
+        state.allowance = (state.allowance / oldRate) * newRate;
+        
+        // Convert transactions
+        state.transactions = state.transactions.map(t => ({
+            ...t,
+            amount: (t.amount / oldRate) * newRate
+        }));
+
+        state.currency = newCurrency;
+        
+        // Update UI
+        document.getElementById('monthlyAllowance').value = state.allowance.toFixed(2);
+        saveState();
+        updateUI();
+        updateCurrencyLabels();
+        showToast(`Converted to ${newCurrency}`, "success");
+    }
+
+    function updateCategoryDropdowns() {
+        const select = document.getElementById('category');
+        const filters = document.getElementById('filters');
+        
+        // Update Form Select
+        select.innerHTML = state.categories.map(cat => 
+            `<option value="${cat}">${cat === 'Edu' ? 'Education' : cat}</option>`
+        ).join('');
+
+        // Update Filters
+        filters.innerHTML = `<button class="filter-btn ${state.currentFilter === 'All' ? 'active' : ''}" data-filter="All">All</button>` + 
+            state.categories.map(cat => 
+                `<button class="filter-btn ${state.currentFilter === cat ? 'active' : ''}" data-filter="${cat}">${cat}</button>`
+            ).join('');
+    }
+
+    function renderCategoryManagement() {
+        const container = document.getElementById('categoryListDisplay');
+        container.innerHTML = state.categories.map(cat => `
+            <div class="tag tag-other" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem;">
+                ${cat}
+                ${['Edu', 'Food', 'Transport', 'Other'].includes(cat) ? '' : `
+                    <span onclick="deleteCategory('${cat}')" style="cursor: pointer; color: var(--accent-red); font-weight: bold;">&times;</span>
+                `}
+            </div>
+        `).join('');
+    }
+
+    function addCategory(e) {
+        e.preventDefault();
+        const input = document.getElementById('newCategoryName');
+        const name = input.value.trim();
+        
+        if (name && !state.categories.includes(name)) {
+            state.categories.push(name);
+            input.value = '';
+            saveState();
+            updateCategoryDropdowns();
+            renderCategoryManagement();
+            updateCharts();
+            showToast(`Category "${name}" added`, "success");
+        } else if (state.categories.includes(name)) {
+            showToast("Category already exists", "error");
+        }
+    }
+
+    function deleteCategory(name) {
+        if (confirm(`Are you sure you want to delete the "${name}" category? Transactions in this category will be moved to "Other".`)) {
+            state.transactions.forEach(t => {
+                if (t.category === name) t.category = 'Other';
+            });
+            state.categories = state.categories.filter(c => c !== name);
+            if (state.currentFilter === name) state.currentFilter = 'All';
+            
+            saveState();
+            updateCategoryDropdowns();
+            renderCategoryManagement();
+            updateUI();
+            showToast(`Category "${name}" removed`, "info");
+        }
+    }
+
+    function initCharts() {
+        const catCtx = document.getElementById('categoryChart').getContext('2d');
+        const colors = [
+            '#3b82f6', '#10b981', '#f59e0b', '#64748b', 
+            '#8b5cf6', '#ec4899', '#06b6d4', '#f97316',
+            '#ef4444', '#14b8a6', '#6366f1', '#a855f7'
+        ];
+        
+        categoryChart = new Chart(catCtx, {
+            type: 'doughnut',
+            data: {
+                labels: state.categories,
+                datasets: [{
+                    data: state.categories.map(() => 0),
+                    backgroundColor: colors.slice(0, state.categories.length),
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                cutout: '70%'
+            }
+        });
+
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        trendChart = new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Daily Spending',
+                    data: [],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+
+    function updateCharts() {
+        if (!categoryChart || !trendChart) return;
+
+        // Filter transactions based on selected range
+        const now = new Date();
+        const startOfToday = new Date(new Date().setHours(0, 0, 0, 0));
+        
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - now.getDay());
+        
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+        let filteredTransactions = state.transactions;
+        if (state.selectedRange === 'today') {
+            filteredTransactions = state.transactions.filter(t => new Date(t.date) >= startOfToday);
+        } else if (state.selectedRange === 'week') {
+            filteredTransactions = state.transactions.filter(t => new Date(t.date) >= startOfWeek);
+        } else if (state.selectedRange === 'month') {
+            filteredTransactions = state.transactions.filter(t => new Date(t.date) >= startOfMonth);
+        } else if (state.selectedRange === 'year') {
+            filteredTransactions = state.transactions.filter(t => new Date(t.date) >= startOfYear);
+        }
+
+        // Update Category Chart
+        const catTotals = {};
+        state.categories.forEach(cat => catTotals[cat] = 0);
+        
+        filteredTransactions.forEach(t => {
+            if (catTotals.hasOwnProperty(t.category)) {
+                catTotals[t.category] += t.amount;
+            } else {
+                catTotals['Other'] = (catTotals['Other'] || 0) + t.amount;
+            }
+        });
+
+        categoryChart.data.labels = state.categories;
+        categoryChart.data.datasets[0].data = state.categories.map(cat => catTotals[cat]);
+        categoryChart.options.plugins.title = {
+            display: true,
+            text: `Spending: ${state.selectedRange.charAt(0).toUpperCase() + state.selectedRange.slice(1)}`
+        };
+        categoryChart.update();
+
+        // Update Trend Chart (Context based on range)
+        let labels = [];
+        let data = [];
+        let trendLabel = "Daily Spending";
+
+        if (state.selectedRange === 'year') {
+            trendLabel = "Monthly Spending";
+            for (let i = 11; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                labels.push(d.toLocaleDateString('en-US', { month: 'short' }));
+                const monthTotal = state.transactions
+                    .filter(t => {
+                        const td = new Date(t.date);
+                        return td.getMonth() === d.getMonth() && td.getFullYear() === d.getFullYear();
+                    })
+                    .reduce((sum, t) => sum + t.amount, 0);
+                data.push(monthTotal);
+            }
+        } else if (state.selectedRange === 'month') {
+            // Last 30 days
+            for (let i = 29; i >= 0; i -= 3) {
+                const d = new Date();
+                d.setDate(now.getDate() - i);
+                labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                const dayTotal = state.transactions
+                    .filter(t => {
+                        const td = new Date(t.date);
+                        return td.toDateString() === d.toDateString();
+                    })
+                    .reduce((sum, t) => sum + t.amount, 0);
+                data.push(dayTotal);
+            }
+        } else {
+            // Last 7 days
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(now.getDate() - i);
+                labels.push(d.toLocaleDateString('en-US', { weekday: 'short' }));
+                const dayTotal = state.transactions
+                    .filter(t => new Date(t.date).toDateString() === d.toDateString())
+                    .reduce((sum, t) => sum + t.amount, 0);
+                data.push(dayTotal);
+            }
+        }
+
+        trendChart.data.labels = labels;
+        trendChart.data.datasets[0].data = data;
+        trendChart.data.datasets[0].label = trendLabel;
+        trendChart.update();
     }
 
     function saveState() {
         localStorage.setItem('studify_finance', JSON.stringify({
             transactions: state.transactions,
-            allowance: state.allowance
+            categories: state.categories,
+            allowance: state.allowance,
+            currency: state.currency,
+            theme: state.theme
         }));
     }
 
@@ -609,15 +1071,15 @@
         const safeToSpend = remaining > 0 ? (remaining / daysRemaining) : 0;
 
         // Update Summary Cards
-        document.getElementById('totalSpent').textContent = `$${totalSpent.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('remainingBalance').textContent = `$${remaining.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('safeToSpend').textContent = `$${safeToSpend.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('totalSpent').textContent = formatCurrency(totalSpent);
+        document.getElementById('remainingBalance').textContent = formatCurrency(remaining);
+        document.getElementById('safeToSpend').textContent = formatCurrency(safeToSpend);
 
         // Update Analytics Cards
-        document.getElementById('spendToday').textContent = `$${spendToday.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('spendWeek').textContent = `$${spendWeek.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('spendMonth').textContent = `$${spendMonth.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('spendYear').textContent = `$${spendYear.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('spendToday').textContent = formatCurrency(spendToday);
+        document.getElementById('spendWeek').textContent = formatCurrency(spendWeek);
+        document.getElementById('spendMonth').textContent = formatCurrency(spendMonth);
+        document.getElementById('spendYear').textContent = formatCurrency(spendYear);
 
         // Update Progress Bar
         const percent = Math.min((totalSpent / state.allowance) * 100, 100);
@@ -633,6 +1095,7 @@
         else if (percent < 90) bar.classList.add('progress-yellow');
         else bar.classList.add('progress-red');
 
+        updateCharts();
         renderTransactions();
     }
 
@@ -654,7 +1117,7 @@
                 row.innerHTML = `
                     <td>${t.desc}</td>
                     <td><span class="tag tag-${t.category.toLowerCase()}">${t.category}</span></td>
-                    <td style="font-weight: 600;">$${t.amount.toFixed(2)}</td>
+                    <td style="font-weight: 600;">${formatCurrency(t.amount)}</td>
                     <td><button onclick="deleteTransaction(${t.id})" style="color: var(--accent-red); background: none; border: none; cursor: pointer; font-size: 0.75rem;">Delete</button></td>
                 `;
                 list.appendChild(row);
@@ -694,14 +1157,16 @@
         descInput.value = '';
         amountInput.value = '';
         
-        showToast(`Logged: ${newTransaction.desc} ($${amount})`, "success");
+        showToast(`Logged: ${newTransaction.desc} (${formatCurrency(amount)})`, "success");
     }
 
     function deleteTransaction(id) {
+        const trans = state.transactions.find(t => t.id === id);
+        const amountStr = trans ? formatCurrency(trans.amount) : "";
         state.transactions = state.transactions.filter(t => t.id !== id);
         saveState();
         updateUI();
-        showToast("Transaction deleted", "info");
+        showToast(`Transaction deleted ${amountStr}`, "info");
     }
 
     function showToast(message, type) {
@@ -722,6 +1187,7 @@
 
     // --- Event Listeners ---
     document.getElementById('transactionForm').addEventListener('submit', addTransaction);
+    document.getElementById('categoryForm').addEventListener('submit', addCategory);
 
     document.getElementById('monthlyAllowance').addEventListener('change', (e) => {
         state.allowance = parseFloat(e.target.value) || 0;
@@ -730,12 +1196,26 @@
         showToast("Allowance updated", "success");
     });
 
+    document.getElementById('saveSettingsBtn').addEventListener('click', changeCurrency);
+    document.getElementById('themeToggle').addEventListener('change', toggleTheme);
+    document.getElementById('headerThemeToggle').addEventListener('change', toggleTheme);
+
     document.getElementById('filters').addEventListener('click', (e) => {
         if (e.target.classList.contains('filter-btn')) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             e.target.classList.add('active');
             state.currentFilter = e.target.dataset.filter;
             renderTransactions();
+        }
+    });
+
+    document.querySelector('.analytics-filters').addEventListener('click', (e) => {
+        const card = e.target.closest('.stat-card');
+        if (card) {
+            document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            state.selectedRange = card.dataset.range;
+            updateCharts();
         }
     });
 
