@@ -1,1 +1,15 @@
+The 3 Major Student Financial Problems
+1. The "Invisible Leak" (Daily Micropayments)
+The Problem: Small daily costs—a Rs. 100 tea here, a Rs. 50 photocopy there, or a quick bus ride—don't feel like "spending." However, these can easily consume 30% of a monthly budget without the student realizing it.
 
+The Solution: Instant logging. By recording every small transaction on the spot, the tracker turns "pocket change" into a visible data point, showing exactly where the leak is happening.
+
+2. The "End-of-Month" Drought
+The Problem: Students often feel "rich" in the first week after receiving their allowance, leading to overspending on social activities. By the third week, they struggle to afford basic necessities like transport or meals.
+
+The Solution: Daily Safe-to-Spend Limits. The tracker calculates a daily allowance based on the remaining days in the month. If you overspend today, your limit for tomorrow automatically drops, providing a real-time "reality check."
+
+3. Unexpected Academic Surpluses
+The Problem: University life is unpredictable. A sudden need for a specific textbook, a group project contribution, or an extra data pack for online research can throw a manual budget into total chaos.
+
+The Solution: Emergency Buffers & Categorization. By categorizing funds, students can see exactly how much "flexible" money they have left for education-specific emergencies without touching their food budget.
