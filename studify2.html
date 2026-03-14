@@ -8,29 +8,79 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --accent-blue: #10b981;
-            --accent-green: #22c55e;
+            --accent-blue: #2563eb; /* Royal Blue */
+            --accent-green: #10b981; /* Emerald */
             --accent-yellow: #f59e0b;
             --accent-red: #ef4444;
-            --bg-color: #f0fdf4;
+            --bg-color: #f8fafc; /* Slate 50 */
             --card-bg: #ffffff;
             --sidebar-bg: #ffffff;
-            --text-main: #064e3b;
-            --text-secondary: #065f46;
-            --border: #d1fae5;
+            --text-main: #0f172a; /* Slate 900 */
+            --text-secondary: #64748b; /* Slate 500 */
+            --border: #e2e8f0; /* Slate 200 */
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --sidebar-width: 240px;
             --transition-speed: 0.3s;
         }
 
         [data-theme="dark"] {
-            --bg-color: #061712;
-            --card-bg: #0a261f;
-            --sidebar-bg: #0a261f;
-            --text-main: #ecfdf5;
-            --text-secondary: #a7f3d0;
-            --border: #115e59;
-            --accent-blue: #34d399;
+            --bg-color: #0f172a; /* Deep Navy */
+            --card-bg: #1e293b;
+            --sidebar-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --accent-blue: #38bdf8; /* Sky Blue accent */
+        }
+
+        [data-theme="ocean"] {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+            --text-main: #1e3a8a; /* Navy Blue */
+            --text-secondary: #1e40af;
+            --border: #cbd5e1;
+            --accent-blue: #0369a1; /* Deep Ocean */
+        }
+
+        [data-theme="rose"] {
+            --bg-color: #f4f4f5; /* Zinc 50 */
+            --card-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+            --text-main: #18181b;
+            --text-secondary: #52525b;
+            --border: #e4e4e7;
+            --accent-blue: #71717a; /* Steel Gray */
+        }
+
+        [data-theme="lavender"] {
+            --bg-color: #f5f3ff;
+            --card-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+            --text-main: #4c1d95;
+            --text-secondary: #6d28d9;
+            --border: #ddd6fe;
+            --accent-blue: #4f46e5; /* Indigo Investment */
+        }
+
+        [data-theme="sunset"] {
+            --bg-color: #fafaf9; /* Stone 50 */
+            --card-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+            --text-main: #44403c;
+            --text-secondary: #78716c;
+            --border: #e7e5e4;
+            --accent-blue: #ca8a04; /* Corporate Gold */
+        }
+
+        [data-theme="forest"] {
+            --bg-color: #f0fdf4;
+            --card-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+            --text-main: #064e3b;
+            --text-secondary: #065f46;
+            --border: #d1fae5;
+            --accent-blue: #059669; /* Growth Green */
         }
 
         * {
@@ -331,6 +381,82 @@
         .btn-secondary { background: #e2e8f0; color: #0f172a; }
         .btn-primary { background: var(--accent-blue); color: white; }
 
+        /* Profile Picture Styling */
+        .profile-pic-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--accent-blue);
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-pic-placeholder {
+            font-size: 2.5rem;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-user {
+            margin-top: auto;
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar-user-info {
+            overflow: hidden;
+        }
+
+        .sidebar-user-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-user-program {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         /* Form */
         .transaction-form {
             display: grid;
@@ -494,6 +620,152 @@
             display: block;
         }
 
+        .theme-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-card.active {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        /* Bank Card Styles */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .bank-card {
+            height: 190px;
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .bank-card:hover {
+            transform: translateY(-5px) rotateX(5deg);
+        }
+
+        .bank-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+
+        .card-chip {
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .card-number {
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .card-holder {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .card-expiry {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .card-type {
+            font-style: italic;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        /* Card Color Variants */
+        .card-blue { background: linear-gradient(135deg, #1e3a8a, #3b82f6); }
+        .card-dark { background: linear-gradient(135deg, #0f172a, #334155); }
+        .card-green { background: linear-gradient(135deg, #064e3b, #10b981); }
+        .card-purple { background: linear-gradient(135deg, #4c1d95, #8b5cf6); }
+
+        /* Bank Account Card Styles */
+        .account-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: 190px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .account-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .bank-badge {
+            background: #eff6ff;
+            color: #3b82f6;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .account-number-display {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+
+        .account-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
@@ -536,6 +808,13 @@
         <h2>Profile Setup</h2>
         <p style="color: var(--text-secondary); margin-bottom: 0.65rem;">Add your details to personalize your dashboard.</p>
         <form id="profileForm" class="profile-form">
+            <div style="text-align: center; margin-bottom: 0.5rem;">
+                <div class="profile-pic-container" id="overlayPicPreview" onclick="document.getElementById('profilePicInput').click()" style="cursor: pointer; margin: 0 auto 0.5rem;">
+                    <span class="profile-pic-placeholder">👤</span>
+                </div>
+                <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+                <p style="font-size: 0.7rem; color: var(--text-secondary);">Click to upload photo</p>
+            </div>
             <div><label for="profileName">Full Name</label><input id="profileName" required placeholder="Your full name"></div>
             <div><label for="profileProgram">Course/Program</label><input id="profileProgram" required placeholder="e.g. Computer Science"></div>
             <div><label for="profileBudget">Monthly Budget</label><input id="profileBudget" type="number" min="1" required placeholder="1000"></div>
@@ -564,8 +843,18 @@
         <li><a href="#" class="nav-item" data-tab="analytics">📈 Analytics</a></li>
         <li><a href="#" class="nav-item" data-tab="budgets">💰 Budgets</a></li>
         <li><a href="#" class="nav-item" data-tab="profile">👤 Profile</a></li>
+        <li><a href="#" class="nav-item" data-tab="cards">💳 Cards</a></li>
         <li><a href="#" class="nav-item" data-tab="settings">⚙️ Settings</a></li>
     </ul>
+    
+    <div class="sidebar-user" id="sidebarUser">
+        <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+        <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebarUserName">Guest User</div>
+            <div class="sidebar-user-program" id="sidebarUserProgram">Program not set</div>
+        </div>
+    </div>
+
     <div class="sidebar-footer">
         <span style="font-size:.75rem; color: var(--text-secondary);">Studify</span>
     </div>
@@ -753,6 +1042,27 @@
         </div>
     </div>
 
+    <!-- Cards Tab -->
+    <div id="cards" class="tab-content">
+        <h3 style="margin-bottom: 1rem; font-size: 1rem;">My Financial Methods</h3>
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Manage your cards and bank accounts. <strong>(Demo: Do not enter real sensitive data)</strong></p>
+            
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                <button class="filter-btn active" id="formTypeCard" onclick="setFormType('card')">Add Bank Card</button>
+                <button class="filter-btn" id="formTypeAccount" onclick="setFormType('account')">Add Bank Account</button>
+            </div>
+
+            <form id="cardForm" class="transaction-form" style="grid-template-columns: 2fr 1fr 1fr 1fr auto;">
+                <!-- Fields are injected by JS based on type -->
+            </form>
+        </div>
+
+        <div id="cardsGrid" class="cards-grid">
+            <!-- Items will be rendered here -->
+        </div>
+    </div>
+
     <!-- Settings Tab -->
     <div id="settings" class="tab-content">
         <h3 style="margin-bottom: 1rem; font-size: 1rem;">General Settings</h3>
@@ -770,7 +1080,7 @@
             <button class="btn-add" id="saveSettingsBtn" style="width: 100%;">Apply & Convert</button>
         </div>
         <h3 style="margin-bottom: 1rem; font-size: 1rem;">Appearance</h3>
-        <div class="card">
+        <div class="card" style="margin-bottom: 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <p style="font-weight: 600;">Dark Mode</p>
@@ -782,7 +1092,53 @@
                 </label>
             </div>
         </div>
+
+        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Theme Library</h3>
+        <div class="card">
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Choose a professional interface that matches your workflow.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem;">
+                <!-- Professional Slate -->
+                <div class="theme-card" onclick="setSpecificTheme('forest')" style="background: #f8fafc; border: 2px solid #e2e8f0; cursor: pointer; padding: 1rem; border-radius: 12px; text-align: center;">
+                    <div style="width: 100%; height: 60px; background: #2563eb; border-radius: 8px; margin-bottom: 0.5rem;"></div>
+                    <span style="font-weight: 600; font-size: 0.8rem; color: #0f172a;">Slate (Default)</span>
+                </div>
+
+                <!-- Midnight -->
+                <div class="theme-card" onclick="setSpecificTheme('dark')" style="background: #0f172a; border: 2px solid #334155; cursor: pointer; padding: 1rem; border-radius: 12px; text-align: center;">
+                    <div style="width: 100%; height: 60px; background: #38bdf8; border-radius: 8px; margin-bottom: 0.5rem;"></div>
+                    <span style="font-weight: 600; font-size: 0.8rem; color: #f8fafc;">Midnight Blue</span>
+                </div>
+
+                <!-- Corporate Trust -->
+                <div class="theme-card" onclick="setSpecificTheme('ocean')" style="background: #f1f5f9; border: 2px solid #cbd5e1; cursor: pointer; padding: 1rem; border-radius: 12px; text-align: center;">
+                    <div style="width: 100%; height: 60px; background: #0369a1; border-radius: 8px; margin-bottom: 0.5rem;"></div>
+                    <span style="font-weight: 600; font-size: 0.8rem; color: #1e3a8a;">Trust Blue</span>
+                </div>
+
+                <!-- Executive -->
+                <div class="theme-card" onclick="setSpecificTheme('rose')" style="background: #f4f4f5; border: 2px solid #e4e4e7; cursor: pointer; padding: 1rem; border-radius: 12px; text-align: center;">
+                    <div style="width: 100%; height: 60px; background: #71717a; border-radius: 8px; margin-bottom: 0.5rem;"></div>
+                    <span style="font-weight: 600; font-size: 0.8rem; color: #18181b;">Executive Silver</span>
+                </div>
+
+                <!-- Premium -->
+                <div class="theme-card" onclick="setSpecificTheme('lavender')" style="background: #f5f3ff; border: 2px solid #ddd6fe; cursor: pointer; padding: 1rem; border-radius: 12px; text-align: center;">
+                    <div style="width: 100%; height: 60px; background: #4f46e5; border-radius: 8px; margin-bottom: 0.5rem;"></div>
+                    <span style="font-weight: 600; font-size: 0.8rem; color: #4c1d95;">Premium Wealth</span>
+                </div>
+
+                <!-- Equity -->
+                <div class="theme-card" onclick="setSpecificTheme('sunset')" style="background: #fafaf9; border: 2px solid #e7e5e4; cursor: pointer; padding: 1rem; border-radius: 12px; text-align: center;">
+                    <div style="width: 100%; height: 60px; background: #ca8a04; border-radius: 8px; margin-bottom: 0.5rem;"></div>
+                    <span style="font-weight: 600; font-size: 0.8rem; color: #44403c;">Modern Equity</span>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Themes Tab removed -->
+    <!-- ... -->
     </div>
 </main>
 
@@ -793,12 +1149,13 @@
     let state = {
         transactions: [],
         categories: ['Edu', 'Food', 'Transport', 'Other'],
+        cards: [],
         allowance: 1000,
         currency: 'USD',
         theme: 'light',
         currentFilter: 'All',
         selectedRange: 'week',
-        profile: { name: '', program: '', budget: 1000 }
+        profile: { name: '', program: '', budget: 1000, image: null }
     };
 
     const currencyConfig = {
@@ -810,15 +1167,71 @@
 
     let categoryChart = null;
     let trendChart = null;
+    let tempImage = null;
 
     // --- Initialization ---
     function updateProfileUI() {
         document.getElementById('profileNameDisplay').textContent = state.profile.name || 'Not set';
         document.getElementById('profileProgramDisplay').textContent = state.profile.program || 'Not set';
         document.getElementById('profileBudgetDisplay').textContent = state.profile.budget ? formatCurrency(state.profile.budget) : formatCurrency(0);
+        
+        // Update Profile Tab Image
+        const profileTabContainer = document.querySelector('#profile .card div:first-child');
+        let profileImgEl = document.getElementById('profileTabImage');
+        if (!profileImgEl) {
+            const imgWrapper = document.createElement('div');
+            imgWrapper.className = 'profile-pic-container';
+            imgWrapper.style.margin = '0 0 1rem 0';
+            imgWrapper.id = 'profileTabImageWrapper';
+            imgWrapper.innerHTML = `<img id="profileTabImage" src="" style="display:none;"><span class="profile-pic-placeholder">👤</span>`;
+            profileTabContainer.prepend(imgWrapper);
+            profileImgEl = document.getElementById('profileTabImage');
+        }
+
+        const placeholder = profileImgEl.nextElementSibling;
+        if (state.profile.image) {
+            profileImgEl.src = state.profile.image;
+            profileImgEl.style.display = 'block';
+            placeholder.style.display = 'none';
+        } else {
+            profileImgEl.style.display = 'none';
+            placeholder.style.display = 'block';
+        }
+
+        // Update Sidebar
+        const sidebarAvatar = document.getElementById('sidebarAvatar');
+        const sidebarName = document.getElementById('sidebarUserName');
+        const sidebarProgram = document.getElementById('sidebarUserProgram');
+
+        sidebarName.textContent = state.profile.name || 'Guest User';
+        sidebarProgram.textContent = state.profile.program || 'Program not set';
+
+        if (state.profile.image) {
+            sidebarAvatar.innerHTML = `<img src="${state.profile.image}">`;
+        } else {
+            sidebarAvatar.textContent = state.profile.name ? state.profile.name.charAt(0).toUpperCase() : 'S';
+        }
+
         const greeting = document.getElementById('headerGreeting');
         if (greeting) {
             greeting.textContent = state.profile.name ? `Hi ${state.profile.name.split(' ')[0]}, track your budget!` : 'Welcome back!';
+        }
+    }
+
+    function handleImageUpload(e) {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 1024 * 1024) { // 1MB limit for localStorage
+                showToast("Image too large. Please use an image under 1MB.", "error");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                tempImage = event.target.result;
+                const preview = document.querySelector('#overlayPicPreview');
+                preview.innerHTML = `<img src="${tempImage}">`;
+            };
+            reader.readAsDataURL(file);
         }
     }
 
@@ -872,6 +1285,7 @@
             const parsed = JSON.parse(savedData);
             state.transactions = parsed.transactions || [];
             state.categories = parsed.categories || ['Edu', 'Food', 'Transport', 'Other'];
+            state.cards = parsed.cards || [];
             state.allowance = parsed.allowance || 1000;
             state.currency = parsed.currency || 'USD';
             state.theme = parsed.theme || 'light';
@@ -893,6 +1307,7 @@
         renderCategoryManagement();
         updateCategoryDropdowns();
         updateCurrencyLabels();
+        renderCards();
 
         const activeTab = localStorage.getItem('studify_active_tab') || 'dashboard';
         setActiveTab(activeTab);
@@ -905,12 +1320,197 @@
         }
     }
 
+    // --- Card & Account Management ---
+    let currentCardFormType = 'card';
+
+    function setFormType(type) {
+        currentCardFormType = type;
+        const cardBtn = document.getElementById('formTypeCard');
+        const accountBtn = document.getElementById('formTypeAccount');
+        const form = document.getElementById('cardForm');
+
+        if (type === 'card') {
+            cardBtn.classList.add('active');
+            accountBtn.classList.remove('active');
+            form.innerHTML = `
+                <div class="form-group">
+                    <label>Cardholder Name</label>
+                    <input type="text" id="cardHolder" placeholder="FULL NAME" required>
+                </div>
+                <div class="form-group">
+                    <label>Card Number (Last 4)</label>
+                    <input type="text" id="cardNumber" maxlength="4" placeholder="1234" required>
+                </div>
+                <div class="form-group">
+                    <label>Expiry</label>
+                    <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                </div>
+                <div class="form-group">
+                    <label>Theme</label>
+                    <select id="cardTheme">
+                        <option value="card-blue">Blue</option>
+                        <option value="card-dark">Dark</option>
+                        <option value="card-green">Green</option>
+                        <option value="card-purple">Purple</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-add">Add Card</button>
+            `;
+        } else {
+            cardBtn.classList.remove('active');
+            accountBtn.classList.add('active');
+            form.innerHTML = `
+                <div class="form-group">
+                    <label>Bank Name</label>
+                    <input type="text" id="bankName" placeholder="e.g. Chase Bank" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Holder</label>
+                    <input type="text" id="accHolder" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" id="accNumber" placeholder="Last 4 Digits" maxlength="4" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Type</label>
+                    <select id="accType">
+                        <option value="Savings">Savings</option>
+                        <option value="Checking">Checking</option>
+                        <option value="Joint">Joint</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-add">Add Account</button>
+            `;
+        }
+    }
+
+    function renderCards() {
+        const grid = document.getElementById('cardsGrid');
+        grid.innerHTML = '';
+        
+        if (state.cards.length === 0) {
+            grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1/-1; text-align: center; padding: 2rem;">No items added yet.</p>';
+            return;
+        }
+
+        state.cards.forEach(item => {
+            const itemEl = document.createElement('div');
+            
+            if (item.type === 'card') {
+                itemEl.className = `bank-card ${item.theme}`;
+                itemEl.innerHTML = `
+                    <div>
+                        <div class="card-chip"></div>
+                        <div class="card-number">**** **** **** ${item.number}</div>
+                    </div>
+                    <div class="card-footer">
+                        <div>
+                            <div class="card-holder">${item.holder}</div>
+                            <div class="card-expiry">EXPIRES ${item.expiry}</div>
+                        </div>
+                        <div class="card-type">VISA</div>
+                        <button onclick="deleteCard(${item.id})" style="position: absolute; top: 1rem; right: 1rem; background: rgba(0,0,0,0.2); border: none; color: white; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+                    </div>
+                `;
+            } else {
+                itemEl.className = 'account-card';
+                itemEl.innerHTML = `
+                    <div class="account-header">
+                        <div class="bank-badge">${item.bankName}</div>
+                        <div style="font-size: 1.2rem;">🏦</div>
+                    </div>
+                    <div>
+                        <div class="account-label">${item.accType} Account</div>
+                        <div class="account-number-display">**** **** ${item.number}</div>
+                    </div>
+                    <div class="card-footer">
+                        <div>
+                            <div class="account-label">ACCOUNT HOLDER</div>
+                            <div style="font-weight: 600; font-size: 0.85rem;">${item.holder}</div>
+                        </div>
+                        <button onclick="deleteCard(${item.id})" style="position: absolute; top: 1rem; right: 1rem; background: var(--border); border: none; color: var(--text-secondary); border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+                    </div>
+                `;
+            }
+            grid.appendChild(itemEl);
+        });
+    }
+
+    function addCard(e) {
+        e.preventDefault();
+        let newItem;
+
+        if (currentCardFormType === 'card') {
+            const holder = document.getElementById('cardHolder').value.trim();
+            const number = document.getElementById('cardNumber').value.trim();
+            const expiry = document.getElementById('cardExpiry').value.trim();
+            const theme = document.getElementById('cardTheme').value;
+
+            if (number.length !== 4) {
+                showToast("Enter exactly 4 digits for the card number.", "error");
+                return;
+            }
+
+            newItem = {
+                id: Date.now(),
+                type: 'card',
+                holder,
+                number,
+                expiry,
+                theme
+            };
+        } else {
+            const bankName = document.getElementById('bankName').value.trim();
+            const holder = document.getElementById('accHolder').value.trim();
+            const number = document.getElementById('accNumber').value.trim();
+            const accType = document.getElementById('accType').value;
+
+            if (number.length !== 4) {
+                showToast("Enter exactly 4 digits for the account number.", "error");
+                return;
+            }
+
+            newItem = {
+                id: Date.now(),
+                type: 'account',
+                bankName,
+                holder,
+                number,
+                accType
+            };
+        }
+
+        state.cards.push(newItem);
+        saveState();
+        renderCards();
+        setFormType(currentCardFormType); // Clear form
+        showToast(`${newItem.type === 'card' ? 'Card' : 'Account'} added successfully!`, "success");
+    }
+
+    function deleteCard(id) {
+        if (confirm("Remove this item?")) {
+            state.cards = state.cards.filter(c => c.id !== id);
+            saveState();
+            renderCards();
+            showToast("Removed", "info");
+        }
+    }
+
     function toggleTheme() {
-        state.theme = state.theme === 'light' ? 'dark' : 'light';
+        state.theme = (state.theme === 'dark' ? 'forest' : 'dark');
         document.documentElement.setAttribute('data-theme', state.theme);
         updateThemeSwitch();
         saveState();
         showToast(`Theme switched to ${state.theme}`, "info");
+    }
+
+    function setSpecificTheme(themeName) {
+        state.theme = themeName;
+        document.documentElement.setAttribute('data-theme', themeName);
+        updateThemeSwitch();
+        saveState();
+        showToast(`Theme set to ${themeName}`, "success");
     }
 
     function updateThemeSwitch() {
@@ -945,7 +1545,7 @@
             return;
         }
 
-        state.profile = { name, program, budget };
+        state.profile = { name, program, budget, image: tempImage || state.profile.image };
         state.allowance = budget;
         state.currency = currency;
         document.getElementById('monthlyAllowance').value = state.allowance;
@@ -957,10 +1557,11 @@
         updateUI();
         hideProfileOverlay();
         showToast('Profile saved! You can edit anytime from settings.', 'success');
+        tempImage = null; // Reset temp after saving
     }
 
     function signOutProfile() {
-        state.profile = { name: '', program: '', budget: state.allowance };
+        state.profile = { name: '', program: '', budget: state.allowance, image: null };
         saveState();
         updateProfileUI();
         showToast('Signed out. Please set up a new profile.', 'info');
@@ -1383,6 +1984,7 @@
     // --- Event Listeners ---
     document.getElementById('transactionForm').addEventListener('submit', addTransaction);
     document.getElementById('categoryForm').addEventListener('submit', addCategory);
+    document.getElementById('cardForm').addEventListener('submit', addCard);
 
     document.getElementById('monthlyAllowance').addEventListener('change', (e) => {
         state.allowance = parseFloat(e.target.value) || 0;
@@ -1392,6 +1994,7 @@
     });
 
     document.getElementById('profileForm').addEventListener('submit', saveProfile);
+    document.getElementById('profilePicInput').addEventListener('change', handleImageUpload);
     document.getElementById('profileSkipBtn').addEventListener('click', () => {
         hideProfileOverlay();
         showToast('Profile setup skipped. You can update from settings.', 'info');
