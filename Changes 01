@@ -1,0 +1,19 @@
+✅ Negative/zero budget validation
+✅ Profile budget validation
+✅ Delete transaction confirmation
+✅ Duplicate Chart.js import removed
+✅ Tab switch toast removed
+✅ Sign out clears all data
+✅ Empty form feedback
+✅ Input sanitization
+✅ Magic numbers documented
+
+New feature — Adjustable Savings Rate ✅
+
+Default is 5% — automatically reserved from budget
+User can change it anytime in Settings → Savings Goal
+Capped between 0% and 50% — can't save more than half your budget
+Daily Safe-to-Spend now calculated on the spendable 95% only
+Progress bar tracks spending against spendable budget, not total budget
+New "Monthly Savings 🐷" card on the dashboard shows the reserved amount
+Resets to 5% on sign out
