@@ -1,0 +1,18 @@
+🔴 Problems I found:
+Problem 1 — No input sanitization on category name
+Just like the description field, someone could type <script>alert('x')</script> as a category name. We fixed transactions but forgot categories.
+Problem 2 — Category name has no length limit
+Someone could type a 500 character category name and break the UI layout completely.
+Problem 3 — "Budget Settings" section is empty
+There's a card that just says "Manage your monthly allowance..." but does absolutely nothing. It's placeholder text the AI left behind — looks unfinished.
+Problem 4 — Case sensitivity issue
+Adding "food" and "Food" would create two separate categories since there's no case check.
+
+Fix — Input sanitization ✅
+Category names now go through the same sanitizeInput() function we built earlier — no script injection possible.
+Fix — 20 character limit ✅
+Both the HTML maxlength attribute AND the JavaScript validation enforce this — two layers of protection.
+Fix — Case insensitive duplicates ✅
+Now "food", "Food" and "FOOD" are all treated as the same category. Uses .toLowerCase() for comparison.
+Fix — Empty Budget Settings removed ✅
+That placeholder section was just unfinished AI-generated code. Removing it makes the tab look clean and complete.
