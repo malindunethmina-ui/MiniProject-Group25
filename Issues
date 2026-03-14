@@ -1,0 +1,9 @@
+✅ Negative/zero budget validation
+✅ Profile budget validation
+✅ Delete transaction confirmation
+✅ Duplicate Chart.js import removed
+✅ Tab switch toast removed
+✅ Sign out clears all data
+✅ Empty form feedback
+✅ Input sanitization
+✅ Magic numbers documented
