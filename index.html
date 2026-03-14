@@ -96,6 +96,83 @@
 
         .nav-item i { width: 20px; text-align: center; }
 
+        /* Profile Picture Styling */
+        .profile-pic-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--accent-blue);
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-pic-placeholder {
+            font-size: 2.5rem;
+            color: var(--text-muted);
+        }
+
+        .sidebar-user {
+            margin-top: auto;
+            padding: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar-user-info {
+            overflow: hidden;
+        }
+
+        .sidebar-user-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-user-program {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         /* Main Content Styling */
         .main-content {
             flex-grow: 1;
@@ -902,10 +979,13 @@
                                 <h3><i class="fa-solid fa-user"></i> Student Profile</h3>
                                 
                                 <div class="profile-avatar-section">
-                                    <div class="large-avatar" id="profile-avatar">AJ</div>
+                                    <div class="profile-pic-container" id="profile-pic-preview" onclick="document.getElementById('profile-pic-input').click()" style="cursor: pointer; margin: 0;">
+                                        <span class="profile-pic-placeholder" id="profile-avatar-placeholder">👤</span>
+                                    </div>
+                                    <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
                                     <div class="avatar-info">
                                         <h3 id="profile-name-display">Alex Johnson</h3>
-                                        <p>Student Account</p>
+                                        <p>Click photo to upload</p>
                                     </div>
                                 </div>
 
@@ -973,7 +1053,25 @@
         class ProfileManager {
             constructor() {
                 this.storageKey = 'studentProfile';
+                this.tempImage = null;
                 this.loadProfile();
+                this.initImageUpload();
+                this.addSidebar();
+            }
+
+            addSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                const userDiv = document.createElement('div');
+                userDiv.className = 'sidebar-user';
+                userDiv.id = 'sidebar-user-info';
+                userDiv.innerHTML = `
+                    <div class="sidebar-avatar" id="sidebar-avatar-img">S</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="sidebar-name">Student</div>
+                        <div class="sidebar-user-program" id="sidebar-program">Program</div>
+                    </div>
+                `;
+                sidebar.appendChild(userDiv);
             }
 
             loadProfile() {
@@ -982,21 +1080,52 @@
                     name: 'Alex Johnson',
                     bio: '',
                     email: '',
-                    major: ''
+                    major: '',
+                    image: null
                 };
                 this.updateUI();
             }
 
             saveProfile(data) {
-                this.profile = { ...this.profile, ...data };
+                this.profile = { ...this.profile, ...data, image: this.tempImage || this.profile.image };
                 localStorage.setItem(this.storageKey, JSON.stringify(this.profile));
+                this.tempImage = null;
                 this.updateUI();
+            }
+
+            initImageUpload() {
+                const input = document.getElementById('profile-pic-input');
+                if (!input) return;
+                input.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        if (file.size > 1024 * 1024) {
+                            alert("Image too large. Please use an image under 1MB.");
+                            return;
+                        }
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            this.tempImage = event.target.result;
+                            const preview = document.getElementById('profile-pic-preview');
+                            preview.innerHTML = `<img src="${this.tempImage}">`;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
             }
 
             updateUI() {
                 // Update top-right profile
                 document.querySelector('.user-profile span').textContent = this.profile.name;
                 
+                // Update sidebar
+                const sidebarName = document.getElementById('sidebar-name');
+                const sidebarProgram = document.getElementById('sidebar-program');
+                const sidebarAvatar = document.getElementById('sidebar-avatar-img');
+
+                if (sidebarName) sidebarName.textContent = this.profile.name;
+                if (sidebarProgram) sidebarProgram.textContent = this.profile.major || 'Student Account';
+
                 // Update avatar initials
                 const initials = this.profile.name
                     .split(' ')
@@ -1004,21 +1133,41 @@
                     .join('')
                     .toUpperCase()
                     .slice(0, 2);
-                document.querySelector('.user-avatar').textContent = initials;
-                document.getElementById('profile-avatar').textContent = initials;
+
+                const topAvatar = document.querySelector('.user-profile .user-avatar');
+                
+                if (this.profile.image) {
+                    const imgHtml = `<img src="${this.profile.image}">`;
+                    if (topAvatar) topAvatar.innerHTML = imgHtml;
+                    if (sidebarAvatar) sidebarAvatar.innerHTML = imgHtml;
+                    const settingPreview = document.getElementById('profile-pic-preview');
+                    if (settingPreview) settingPreview.innerHTML = imgHtml;
+                } else {
+                    if (topAvatar) topAvatar.textContent = initials;
+                    if (sidebarAvatar) sidebarAvatar.textContent = initials.charAt(0);
+                    const settingPreview = document.getElementById('profile-pic-preview');
+                    if (settingPreview) settingPreview.innerHTML = `<span class="profile-pic-placeholder">👤</span>`;
+                }
                 
                 // Update welcome message with first name
                 const firstName = this.profile.name.split(' ')[0];
-                document.querySelector('.welcome-banner h2').textContent = `Welcome back, ${firstName}! 👋`;
+                const welcomeH2 = document.querySelector('.welcome-banner h2');
+                if (welcomeH2) welcomeH2.textContent = `Welcome back, ${firstName}! 👋`;
                 
                 // Update profile display in settings
-                document.getElementById('profile-name-display').textContent = this.profile.name;
+                const nameDisplay = document.getElementById('profile-name-display');
+                if (nameDisplay) nameDisplay.textContent = this.profile.name;
                 
                 // Update form fields
-                document.getElementById('student-name').value = this.profile.name;
-                document.getElementById('student-bio').value = this.profile.bio;
-                document.getElementById('student-email').value = this.profile.email;
-                document.getElementById('student-major').value = this.profile.major;
+                const nameInp = document.getElementById('student-name');
+                const bioInp = document.getElementById('student-bio');
+                const emailInp = document.getElementById('student-email');
+                const majorInp = document.getElementById('student-major');
+
+                if (nameInp) nameInp.value = this.profile.name;
+                if (bioInp) bioInp.value = this.profile.bio;
+                if (emailInp) emailInp.value = this.profile.email;
+                if (majorInp) majorInp.value = this.profile.major;
             }
         }
 

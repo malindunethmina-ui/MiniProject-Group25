@@ -1,0 +1,3 @@
+Added Crad tab(We can added a bank account and bank card)
+create themes tab in setting
+Update profile tab, we can add a profile pic
