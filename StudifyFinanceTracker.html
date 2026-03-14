@@ -284,6 +284,53 @@
         .progress-yellow { background-color: var(--accent-yellow); }
         .progress-red { background-color: var(--accent-red); }
 
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 1rem;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .overlay-card {
+            width: min(560px, 100%);
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 1.2rem;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.2);
+            animation: scaleIn 0.3s ease;
+            text-align: center;
+        }
+
+        .overlay-card h2 {
+            margin-bottom: 0.3rem;
+            color: var(--accent-blue);
+        }
+
+        .intro-progress { margin-top: 0.8rem; background: #e5e7eb; border-radius: 999px; overflow: hidden; height: 8px; }
+        .intro-progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); transition: width 0.8s ease; }
+
+        .profile-form { display: grid; gap: 0.65rem; text-align: left; margin-top: 0.6rem; }
+        .profile-form label { font-weight: 600; margin-bottom: 0.15rem; display: block; }
+        .profile-form input, .profile-form select { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 0.45rem 0.5rem; }
+        .profile-actions { display: flex; justify-content: flex-end; gap: 0.4rem; margin-top: 0.6rem; }
+        .profile-actions button { border: none; border-radius: 8px; padding: 0.45rem 0.75rem; font-weight: 600; cursor: pointer; }
+        .btn-secondary { background: #e2e8f0; color: #0f172a; }
+        .btn-primary { background: var(--accent-blue); color: white; }
+
         /* Form */
         .transaction-form {
             display: grid;
@@ -475,6 +522,29 @@
 </head>
 <body>
 
+<div id="introOverlay" class="overlay hidden">
+    <div class="overlay-card">
+        <h2>Welcome to Studify</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 0.6rem;">Let’s set up your profile for the first time.</p>
+        <div class="intro-progress"><div id="introProgressBar" class="intro-progress-bar"></div></div>
+        <p id="introStatus" style="margin-top: 0.6rem; font-weight: 600; color: var(--text-secondary);">Starting your setup...</p>
+    </div>
+</div>
+
+<div id="profileOverlay" class="overlay hidden">
+    <div class="overlay-card">
+        <h2>Profile Setup</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 0.65rem;">Add your details to personalize your dashboard.</p>
+        <form id="profileForm" class="profile-form">
+            <div><label for="profileName">Full Name</label><input id="profileName" required placeholder="Your full name"></div>
+            <div><label for="profileProgram">Course/Program</label><input id="profileProgram" required placeholder="e.g. Computer Science"></div>
+            <div><label for="profileBudget">Monthly Budget</label><input id="profileBudget" type="number" min="1" required placeholder="1000"></div>
+            <div><label for="profileCurrency">Currency</label><select id="profileCurrency"><option value="USD">USD ($)</option><option value="LKR">LKR (Rs)</option><option value="INR">INR (₹)</option><option value="EUR">EUR (€)</option></select></div>
+            <div class="profile-actions"><button type="button" class="btn-secondary" id="profileSkipBtn">Skip</button><button type="submit" class="btn-primary">Save Profile</button></div>
+        </form>
+    </div>
+</div>
+
 <div style="position: fixed; top: 1rem; right: 1.5rem; z-index: 1000; display: flex; align-items: center; gap: 0.5rem; background: var(--card-bg); padding: 0.5rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
     <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">🌙</span>
     <label class="switch">
@@ -493,10 +563,11 @@
         <li><a href="#" class="nav-item" data-tab="categories">🏷️ Categories</a></li>
         <li><a href="#" class="nav-item" data-tab="analytics">📈 Analytics</a></li>
         <li><a href="#" class="nav-item" data-tab="budgets">💰 Budgets</a></li>
+        <li><a href="#" class="nav-item" data-tab="profile">👤 Profile</a></li>
         <li><a href="#" class="nav-item" data-tab="settings">⚙️ Settings</a></li>
     </ul>
     <div class="sidebar-footer">
-        <a href="#" class="nav-item">👤 Profile</a>
+        <span style="font-size:.75rem; color: var(--text-secondary);">Studify</span>
     </div>
 </nav>
 
@@ -505,6 +576,7 @@
     <header>
         <div>
             <h1>Studify Finance</h1>
+            <div id="headerGreeting" class="date-display" style="font-weight:700; color:var(--text-main);">Welcome back!</div>
             <div id="currentMonth" class="date-display">March 2026</div>
         </div>
         <div class="allowance-control">
@@ -660,6 +732,27 @@
         </div>
     </div>
 
+    <!-- Profile Tab -->
+    <div id="profile" class="tab-content">
+        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Profile</h3>
+        <div id="profileCard" class="card" style="margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Profile Name</p>
+                    <p id="profileNameDisplay" style="font-weight: 700; margin-bottom: 0.45rem;">Not set</p>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Program</p>
+                    <p id="profileProgramDisplay" style="font-weight: 500; margin-bottom: 0.45rem;">Not set</p>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.25rem;">Budget</p>
+                    <p id="profileBudgetDisplay" style="font-weight: 500;">$0.00</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                    <button id="editProfileBtn" class="btn-add" style="background: #2563eb;">Edit Profile</button>
+                    <button id="signOutBtn" class="btn-add" style="background: #ef4444;">Sign Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Tab -->
     <div id="settings" class="tab-content">
         <h3 style="margin-bottom: 1rem; font-size: 1rem;">General Settings</h3>
@@ -672,13 +765,10 @@
                     <option value="INR">INR - Indian Rupee (₹)</option>
                     <option value="EUR">EUR - Euro (€)</option>
                 </select>
-                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
-                    Changing the currency will convert all your existing transactions and budget to the new currency.
-                </p>
+                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Changing the currency will convert all your existing transactions and budget to the new currency.</p>
             </div>
             <button class="btn-add" id="saveSettingsBtn" style="width: 100%;">Apply & Convert</button>
         </div>
-
         <h3 style="margin-bottom: 1rem; font-size: 1rem;">Appearance</h3>
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -707,7 +797,8 @@
         currency: 'USD',
         theme: 'light',
         currentFilter: 'All',
-        selectedRange: 'week'
+        selectedRange: 'week',
+        profile: { name: '', program: '', budget: 1000 }
     };
 
     const currencyConfig = {
@@ -721,6 +812,60 @@
     let trendChart = null;
 
     // --- Initialization ---
+    function updateProfileUI() {
+        document.getElementById('profileNameDisplay').textContent = state.profile.name || 'Not set';
+        document.getElementById('profileProgramDisplay').textContent = state.profile.program || 'Not set';
+        document.getElementById('profileBudgetDisplay').textContent = state.profile.budget ? formatCurrency(state.profile.budget) : formatCurrency(0);
+        const greeting = document.getElementById('headerGreeting');
+        if (greeting) {
+            greeting.textContent = state.profile.name ? `Hi ${state.profile.name.split(' ')[0]}, track your budget!` : 'Welcome back!';
+        }
+    }
+
+    function showIntroOverlay() {
+        const overlay = document.getElementById('introOverlay');
+        const bar = document.getElementById('introProgressBar');
+        const status = document.getElementById('introStatus');
+        overlay.classList.remove('hidden');
+        bar.style.width = '25%';
+        setTimeout(() => { bar.style.width = '60%'; status.textContent = 'Setting up your finance space...'; }, 450);
+        setTimeout(() => { bar.style.width = '100%'; status.textContent = 'Almost there...'; }, 900);
+        setTimeout(() => { overlay.classList.add('hidden'); checkProfileSetup(); }, 1500);
+    }
+
+    function showProfileOverlay() {
+        const overlay = document.getElementById('profileOverlay');
+        overlay.classList.remove('hidden');
+        document.getElementById('profileName').value = state.profile.name || '';
+        document.getElementById('profileProgram').value = state.profile.program || '';
+        document.getElementById('profileBudget').value = state.profile.budget || state.allowance || 1000;
+        document.getElementById('profileCurrency').value = state.currency;
+    }
+
+    function hideProfileOverlay() {
+        document.getElementById('profileOverlay').classList.add('hidden');
+    }
+
+    function checkProfileSetup() {
+        if (!state.profile.name || !state.profile.program) {
+            showProfileOverlay();
+        }
+    }
+
+    function setActiveTab(tabId) {
+        const tab = document.getElementById(tabId);
+        if (!tab) return;
+
+        document.querySelectorAll('#sidebarNav .nav-item').forEach(item => item.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        const navItem = document.querySelector(`#sidebarNav .nav-item[data-tab='${tabId}']`);
+        if (navItem) navItem.classList.add('active');
+
+        tab.classList.add('active');
+        localStorage.setItem('studify_active_tab', tabId);
+    }
+
     function init() {
         const savedData = localStorage.getItem('studify_finance');
         if (savedData) {
@@ -730,19 +875,34 @@
             state.allowance = parsed.allowance || 1000;
             state.currency = parsed.currency || 'USD';
             state.theme = parsed.theme || 'light';
+            state.profile = parsed.profile || state.profile;
+            if (state.profile && state.profile.budget) {
+                state.allowance = state.profile.budget;
+            }
         }
-        
+
         document.getElementById('monthlyAllowance').value = state.allowance;
         document.getElementById('baseCurrencySelector').value = state.currency;
         document.documentElement.setAttribute('data-theme', state.theme);
         updateThemeSwitch();
-        
+
+        updateProfileUI();
         updateDate();
         initCharts();
         updateUI();
         renderCategoryManagement();
         updateCategoryDropdowns();
         updateCurrencyLabels();
+
+        const activeTab = localStorage.getItem('studify_active_tab') || 'dashboard';
+        setActiveTab(activeTab);
+
+        if (!localStorage.getItem('studify_intro_done')) {
+            showIntroOverlay();
+            localStorage.setItem('studify_intro_done', '1');
+        } else {
+            checkProfileSetup();
+        }
     }
 
     function toggleTheme() {
@@ -771,6 +931,40 @@
         document.querySelectorAll('.currency-symbol-label').forEach(el => {
             el.textContent = `(${symbol})`;
         });
+    }
+
+    function saveProfile(e) {
+        e.preventDefault();
+        const name = document.getElementById('profileName').value.trim();
+        const program = document.getElementById('profileProgram').value.trim();
+        const budget = parseFloat(document.getElementById('profileBudget').value) || state.allowance;
+        const currency = document.getElementById('profileCurrency').value;
+
+        if (!name || !program) {
+            showToast('Please complete your name and program.', 'error');
+            return;
+        }
+
+        state.profile = { name, program, budget };
+        state.allowance = budget;
+        state.currency = currency;
+        document.getElementById('monthlyAllowance').value = state.allowance;
+        document.getElementById('baseCurrencySelector').value = state.currency;
+        document.documentElement.setAttribute('data-theme', state.theme);
+        updateCurrencyLabels();
+        updateProfileUI();
+        saveState();
+        updateUI();
+        hideProfileOverlay();
+        showToast('Profile saved! You can edit anytime from settings.', 'success');
+    }
+
+    function signOutProfile() {
+        state.profile = { name: '', program: '', budget: state.allowance };
+        saveState();
+        updateProfileUI();
+        showToast('Signed out. Please set up a new profile.', 'info');
+        showProfileOverlay();
     }
 
     function changeCurrency() {
@@ -1018,7 +1212,8 @@
             categories: state.categories,
             allowance: state.allowance,
             currency: state.currency,
-            theme: state.theme
+            theme: state.theme,
+            profile: state.profile
         }));
     }
 
@@ -1196,6 +1391,14 @@
         showToast("Allowance updated", "success");
     });
 
+    document.getElementById('profileForm').addEventListener('submit', saveProfile);
+    document.getElementById('profileSkipBtn').addEventListener('click', () => {
+        hideProfileOverlay();
+        showToast('Profile setup skipped. You can update from settings.', 'info');
+    });
+    document.getElementById('editProfileBtn').addEventListener('click', showProfileOverlay);
+    document.getElementById('signOutBtn').addEventListener('click', signOutProfile);
+
     document.getElementById('saveSettingsBtn').addEventListener('click', changeCurrency);
     document.getElementById('themeToggle').addEventListener('change', toggleTheme);
     document.getElementById('headerThemeToggle').addEventListener('change', toggleTheme);
@@ -1224,20 +1427,8 @@
         const navItem = e.target.closest('.nav-item');
         if (navItem && navItem.dataset.tab) {
             e.preventDefault();
-            
-            // Update Navigation UI
-            document.querySelectorAll('#sidebarNav .nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            navItem.classList.add('active');
-            
-            // Switch Tabs
             const targetTab = navItem.dataset.tab;
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.getElementById(targetTab).classList.add('active');
-            
+            setActiveTab(targetTab);
             showToast(`Switched to ${targetTab.charAt(0).toUpperCase() + targetTab.slice(1)}`, "info");
         }
     });
