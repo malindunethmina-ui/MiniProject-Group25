@@ -310,7 +310,7 @@ tr:hover td{background:rgba(16,185,129,.03)}
 <!-- Mobile top bar -->
 <div class="app-topbar">
   <button class="hamburger" id="hamburger" onclick="toggleSidebar()">☰</button>
-  <div class="mobile-brand"><span class="brand-icon">S</span><span class="brand-text">Studify</span></div>
+  <div class="mobile-brand" onclick="setTab('dashboard')" style="cursor:pointer"><span class="brand-icon">S</span><span class="brand-text">Studify</span></div>
   <button id="themeBtn" class="theme-btn" aria-label="Toggle theme">🌙</button>
 </div>
 
@@ -364,7 +364,7 @@ tr:hover td{background:rgba(16,185,129,.03)}
 </div>
 
 <nav class="sidebar">
-  <div class="brand">
+  <div class="brand" onclick="setTab('dashboard')" style="cursor:pointer">
     <span class="brand-icon">S</span>Studify
   </div>
   <ul class="nav-links" id="sidebarNav">
