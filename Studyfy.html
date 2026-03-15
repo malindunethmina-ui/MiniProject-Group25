@@ -666,7 +666,7 @@ tr:hover td{background:rgba(16,185,129,.03)}
 
 <script>
 let S={
-  transactions:[],categories:['Edu','Food','Transport','Other'],
+  transactions:[],categories:['Edu','Food','Transport','Other','Savings'],
   allowance:1000,currency:'USD',theme:'light',
   filter:'All',savingsRate:5,
   profile:{name:'',program:'',university:'',budget:1000,image:null}
@@ -679,7 +679,8 @@ let wC=null,mC=null,yC=null,cC=null;
 
 function init(){
   const d=localStorage.getItem('studify');
-  if(d){const p=JSON.parse(d);S.transactions=p.transactions||[];S.categories=p.categories||['Edu','Food','Transport','Other'];S.allowance=p.allowance||1000;S.currency=p.currency||'USD';S.theme=p.theme||'light';S.savingsRate=p.savingsRate!==undefined?p.savingsRate:5;S.profile=p.profile||S.profile;if(S.profile&&S.profile.budget)S.allowance=S.profile.budget;}
+  if(d){const p=JSON.parse(d);S.transactions=p.transactions||[];S.categories=p.categories||['Edu','Food','Transport','Other','Savings'];S.allowance=p.allowance||1000;S.currency=p.currency||'USD';S.theme=p.theme||'light';S.savingsRate=p.savingsRate!==undefined?p.savingsRate:5;S.profile=p.profile||S.profile;if(S.profile&&S.profile.budget)S.allowance=S.profile.budget;}
+  if(!S.categories.includes('Savings'))S.categories.push('Savings');
   document.getElementById('allowance').value=S.allowance;
   document.getElementById('currSel').value=S.currency;
   document.getElementById('savRate').value=S.savingsRate;
@@ -948,15 +949,18 @@ function fc(n){const c=CC[S.currency];return`${c.s}${n.toLocaleString(undefined,
 function updSymbols(){const s=CC[S.currency].s;document.querySelectorAll('.csym').forEach(e=>e.textContent=`(${s})`);}
 
 function updUI(){
-  const tot=S.transactions.reduce((a,c)=>a+c.amount,0);
-  const sav=S.allowance*(S.savingsRate/100);
-  const spnd=S.allowance-sav;
+  const savingsTx=S.transactions.filter(t=>t.category==='Savings').reduce((a,c)=>a+c.amount,0);
+  const spendingTx=S.transactions.filter(t=>t.category!=='Savings');
+  const tot=spendingTx.reduce((a,c)=>a+c.amount,0);
+  const reserved=S.allowance*(S.savingsRate/100);
+  const sav=reserved+savingsTx;
+  const spnd=S.allowance-reserved-savingsTx;
   const rem=spnd-tot;
   const now=new Date();
   const tstr=now.toDateString();
   const sow=new Date(now);sow.setDate(now.getDate()-now.getDay());sow.setHours(0,0,0,0);
   let td=0,tw=0,tm=0,ty=0;
-  S.transactions.forEach(t=>{const d=new Date(t.date);if(d.toDateString()===tstr)td+=t.amount;if(d>=sow)tw+=t.amount;if(d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear())tm+=t.amount;if(d.getFullYear()===now.getFullYear())ty+=t.amount;});
+  spendingTx.forEach(t=>{const d=new Date(t.date);if(d.toDateString()===tstr)td+=t.amount;if(d>=sow)tw+=t.amount;if(d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear())tm+=t.amount;if(d.getFullYear()===now.getFullYear())ty+=t.amount;});
   const tdays=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
   const drem=tdays-now.getDate()+1;
   const safe=rem>0?(rem/drem):0;
@@ -966,7 +970,7 @@ function updUI(){
   document.getElementById('safe').textContent=fc(safe);
   document.getElementById('totSpent').textContent=fc(tot);
   document.getElementById('savings').textContent=fc(sav);
-  document.getElementById('savLbl').textContent=`${S.savingsRate}% of budget reserved`;
+  document.getElementById('savLbl').textContent=`${S.savingsRate}% reserved + ${fc(savingsTx)} saved manually`;
   document.getElementById('todayMini').textContent=fc(td);
   const rtel=document.getElementById('remToday');rtel.textContent=fc(rtoday);rtel.style.color=rtoday>0?'#10b981':'#ef4444';
   // Show extra expense warning if daily limit exceeded
@@ -982,6 +986,8 @@ function updUI(){
   document.getElementById('bTotal').textContent=fc(S.allowance);document.getElementById('bSavRate').textContent=S.savingsRate;
   document.getElementById('bSavAmt').textContent=fc(sav);document.getElementById('bSpend').textContent=fc(spnd);
   document.getElementById('bSpent').textContent=fc(tm);
+  const savPct=S.allowance>0?Math.round((sav/S.allowance)*100):0;
+  document.getElementById('savLbl').textContent=`${savPct}% saved (${S.savingsRate}% reserved + ${fc(savingsTx)} custom)`;
   const brEl=document.getElementById('bRem');const br=spnd-tm;brEl.textContent=fc(Math.max(br,0));brEl.style.color=br>=0?'#10b981':'#ef4444';
   updCharts();rendTx();
 }
@@ -1022,8 +1028,9 @@ function addTx(e){
   const raw=di.value.trim(),amt=parseFloat(ai.value);
   if(!raw){toast('Please enter a description.','e');di.focus();return;}
   if(isNaN(amt)||amt<=0){toast('Please enter a valid amount greater than 0.','e');ai.focus();return;}
-  S.transactions.push({id:Date.now(),desc:san(raw),amount:amt,category:ci.value,date:new Date().toISOString()});
-  save();updUI();di.value='';ai.value='';toast(`Logged: ${san(raw)} (${fc(amt)})`,'s');
+  const category=ci.value||'Other';
+  S.transactions.push({id:Date.now(),desc:san(raw),amount:amt,category,date:new Date().toISOString()});
+  save();updUI();di.value='';ai.value='';toast(`Logged: ${san(raw)} (${fc(amt)}) (${category})`,'s');
 }
 
 function delTx(id){
@@ -1041,7 +1048,7 @@ function updDrops(){
 }
 
 function rendCats(){
-  document.getElementById('catList').innerHTML=S.categories.map(c=>`<div class="tag to" style="display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem">${c}${['Edu','Food','Transport','Other'].includes(c)?'':`<span onclick="delCat('${c}')" style="cursor:pointer;color:var(--red);font-weight:bold">&times;</span>`}</div>`).join('');
+  document.getElementById('catList').innerHTML=S.categories.map(c=>`<div class="tag to" style="display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem">${c}${['Edu','Food','Transport','Other','Savings'].includes(c)?'':`<span onclick="delCat('${c}')" style="cursor:pointer;color:var(--red);font-weight:bold">&times;</span>`}</div>`).join('');
 }
 
 function addCat(e){
@@ -1146,7 +1153,7 @@ function signOut(){
   // FIX: Sign out clears everything
   if(!confirm('Are you sure? This will clear all your profile data and transactions.'))return;
   S.profile={name:'',program:'',university:'',budget:1000,image:null};S.transactions=[];S.allowance=1000;S.savingsRate=5;
-  S.categories=['Edu','Food','Transport','Other'];S.filter='All';tempImage=null;
+  S.categories=['Edu','Food','Transport','Other','Savings'];S.filter='All';tempImage=null;
   document.getElementById('allowance').value=1000;document.getElementById('savRate').value=5;
   save();localStorage.removeItem('studify_profile_seen');updProfile();updUI();rendCats();updDrops();toast('Signed out. All data cleared.','i');showPOv();
 }
