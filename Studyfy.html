@@ -633,8 +633,8 @@ tr:hover td{background:rgba(16,185,129,.03)}
 
     <h3 style="margin-bottom:1rem;font-size:1rem">Savings Goal</h3>
     <div class="card" style="margin-bottom:1.5rem">
-      <p style="color:var(--muted);margin-bottom:1rem">Minimum is <strong>5%</strong>. Reserved amount excluded from spendable budget and daily safe-to-spend.</p>
-      <div class="fg" style="margin-bottom:1rem"><label>Savings Rate (%)</label><input type="number" id="savRate" min="5" max="50" value="5" style="width:100%"></div>
+      <p style="color:var(--muted);margin-bottom:1rem">Set your savings rate (0–100%). Reserved amount is excluded from spendable budget.</p>
+      <div class="fg" style="margin-bottom:1rem"><label>Savings Rate (%)</label><input type="number" id="savRate" min="0" max="100" value="5" style="width:100%"></div>
       <button class="add" id="applySav" style="width:100%">Apply Savings Rate</button>
     </div>
 
@@ -1316,10 +1316,14 @@ document.getElementById('allowance').addEventListener('change',e=>{
   save();updUI();updProfile();toast('Allowance updated.');
 });
 
-// FIX: Savings rate minimum 5%
+// Savings rate range 0–100
 document.getElementById('applySav').addEventListener('click',()=>{
   const v=parseFloat(document.getElementById('savRate').value);
-  if(isNaN(v)||v<5||v>50){toast('Savings rate must be between 5% and 50%.');document.getElementById('savRate').value=Math.max(S.savingsRate,5);return;}
+  if(isNaN(v)||v<0||v>100){
+    toast('Savings rate must be between 0% and 100%.');
+    document.getElementById('savRate').value=Math.max(0,Math.min(100,S.savingsRate));
+    return;
+  }
   S.savingsRate=v;save();updUI();updProfile();toast(`Savings rate set to ${v}%.`);
 });
 
