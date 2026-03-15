@@ -13,10 +13,53 @@
   --shadow:0 2px 16px rgba(16,185,129,.07);--shadow-hover:0 8px 32px rgba(16,185,129,.14);
   --sw:240px;--radius:14px;
 }
+/* ── DARK ── */
 [data-theme="dark"]{
   --bg:#080e0c;--card:#0f1a16;--sidebar:#0b1410;--text:#e2fdf5;--muted:#6ee7b7;--border:#1c3430;
   --accent:#34d399;--accent2:#10b981;
   --shadow:0 2px 16px rgba(0,0,0,.4);--shadow-hover:0 8px 32px rgba(52,211,153,.1);
+}
+/* ── OCEAN ── */
+[data-theme="ocean"]{
+  --bg:#eff6ff;--card:#ffffff;--sidebar:#ffffff;--text:#1e3a8a;--muted:#3b82f6;--border:#bfdbfe;
+  --accent:#2563eb;--accent2:#1d4ed8;--blue:#0ea5e9;
+  --shadow:0 2px 16px rgba(37,99,235,.07);--shadow-hover:0 8px 32px rgba(37,99,235,.14);
+}
+/* ── MIDNIGHT ── */
+[data-theme="midnight"]{
+  --bg:#0f172a;--card:#1e293b;--sidebar:#1e293b;--text:#f8fafc;--muted:#94a3b8;--border:#334155;
+  --accent:#38bdf8;--accent2:#0ea5e9;--blue:#818cf8;
+  --shadow:0 2px 16px rgba(0,0,0,.4);--shadow-hover:0 8px 32px rgba(56,189,248,.12);
+}
+/* ── PURPLE ── */
+[data-theme="purple"]{
+  --bg:#f5f3ff;--card:#ffffff;--sidebar:#ffffff;--text:#3b0764;--muted:#7c3aed;--border:#ddd6fe;
+  --accent:#7c3aed;--accent2:#6d28d9;--blue:#8b5cf6;
+  --shadow:0 2px 16px rgba(124,58,237,.07);--shadow-hover:0 8px 32px rgba(124,58,237,.15);
+}
+/* ── SUNSET ── */
+[data-theme="sunset"]{
+  --bg:#fff7ed;--card:#ffffff;--sidebar:#ffffff;--text:#431407;--muted:#ea580c;--border:#fed7aa;
+  --accent:#f97316;--accent2:#ea580c;--blue:#fb923c;
+  --shadow:0 2px 16px rgba(249,115,22,.07);--shadow-hover:0 8px 32px rgba(249,115,22,.15);
+}
+/* ── ROSE ── */
+[data-theme="rose"]{
+  --bg:#fff1f2;--card:#ffffff;--sidebar:#ffffff;--text:#4c0519;--muted:#e11d48;--border:#fecdd3;
+  --accent:#e11d48;--accent2:#be123c;--blue:#fb7185;
+  --shadow:0 2px 16px rgba(225,29,72,.07);--shadow-hover:0 8px 32px rgba(225,29,72,.15);
+}
+/* ── GOLD ── */
+[data-theme="gold"]{
+  --bg:#fffbeb;--card:#ffffff;--sidebar:#ffffff;--text:#451a03;--muted:#d97706;--border:#fde68a;
+  --accent:#d97706;--accent2:#b45309;--blue:#f59e0b;
+  --shadow:0 2px 16px rgba(217,119,6,.07);--shadow-hover:0 8px 32px rgba(217,119,6,.15);
+}
+/* ── DARK PURPLE ── */
+[data-theme="darkpurple"]{
+  --bg:#1a1033;--card:#251a45;--sidebar:#1e1540;--text:#ede9fe;--muted:#a78bfa;--border:#3b2f6e;
+  --accent:#a78bfa;--accent2:#8b5cf6;--blue:#c4b5fd;
+  --shadow:0 2px 16px rgba(0,0,0,.4);--shadow-hover:0 8px 32px rgba(167,139,250,.12);
 }
 *{box-sizing:border-box;margin:0;padding:0;transition:background-color .3s,border-color .3s,color .3s}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
@@ -530,7 +573,7 @@ tr:hover td{background:rgba(16,185,129,.03)}
             <p id="pBudD" style="font-weight:500">$0.00</p>
           </div>
           <div>
-            <p style="font-size:.8rem;color:var(--muted);margin-bottom:.15rem">Savings Rate</p>
+            <p style="font-size:.8rem;color:var(--muted);margin-bottom:.15rem">Monthly Savings Rate</p>
             <p id="pSavD" style="font-weight:500;color:#10b981">5%</p>
           </div>
           <div>
@@ -577,10 +620,14 @@ tr:hover td{background:rgba(16,185,129,.03)}
     </div>
 
     <h3 style="margin-bottom:1rem;font-size:1rem">Appearance</h3>
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div><p style="font-weight:600">Dark Mode</p><p style="font-size:.75rem;color:var(--muted)">Switch between light and dark</p></div>
+    <div class="card" style="margin-bottom:1.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+        <div><p style="font-weight:600">Dark Mode</p><p style="font-size:.75rem;color:var(--muted)">Quick toggle light / dark</p></div>
         <label class="switch"><input type="checkbox" id="themeToggle"><span class="slider"></span></label>
+      </div>
+      <p style="font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem">Theme Library</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.75rem" id="themeGrid">
+        <!-- Injected by JS -->
       </div>
     </div>
   </div>
@@ -607,7 +654,11 @@ function init(){
   document.getElementById('currSel').value=S.currency;
   document.getElementById('savRate').value=S.savingsRate;
   document.documentElement.setAttribute('data-theme',S.theme);
-  updTheme();updProfile();updDate();initCharts();updUI();rendCats();updDrops();updSymbols();
+  const _isDark=THEMES.find(t=>t.id===S.theme)?.dark||false;
+  document.getElementById('themeToggle').checked=_isDark;
+  document.getElementById('hTheme').checked=_isDark;
+  updProfile();updDate();initCharts();updUI();rendCats();updDrops();updSymbols();
+  renderThemeGrid();
   setTab(localStorage.getItem('studify_tab')||'dashboard');
   if(!localStorage.getItem('studify_intro')){showIntro();localStorage.setItem('studify_intro','1');}else{chkProfile();}
 }
@@ -1056,9 +1107,49 @@ function signOut(){
   save();updProfile();updUI();rendCats();updDrops();toast('Signed out. All data cleared.','i');showPOv();
 }
 
-// ── THEME ──
-function toggleTheme(){S.theme=S.theme==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',S.theme);updTheme();save();}
-function updTheme(){const d=S.theme==='dark';document.getElementById('themeToggle').checked=d;document.getElementById('hTheme').checked=d;}
+// ── THEME LIBRARY ──
+const THEMES = [
+  { id:'light',      name:'Emerald',      bg:'#f0fdf4', accent:'#10b981', dark:false },
+  { id:'dark',       name:'Dark Green',   bg:'#080e0c', accent:'#34d399', dark:true  },
+  { id:'ocean',      name:'Ocean Blue',   bg:'#eff6ff', accent:'#2563eb', dark:false },
+  { id:'midnight',   name:'Midnight',     bg:'#0f172a', accent:'#38bdf8', dark:true  },
+  { id:'purple',     name:'Lavender',     bg:'#f5f3ff', accent:'#7c3aed', dark:false },
+  { id:'darkpurple', name:'Dark Purple',  bg:'#1a1033', accent:'#a78bfa', dark:true  },
+  { id:'sunset',     name:'Sunset',       bg:'#fff7ed', accent:'#f97316', dark:false },
+  { id:'rose',       name:'Rose',         bg:'#fff1f2', accent:'#e11d48', dark:false },
+  { id:'gold',       name:'Gold',         bg:'#fffbeb', accent:'#d97706', dark:false },
+];
+
+function renderThemeGrid(){
+  const grid=document.getElementById('themeGrid');
+  if(!grid)return;
+  grid.innerHTML=THEMES.map(t=>`
+    <div onclick="applyTheme('${t.id}')" id="themeCard-${t.id}"
+      style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid ${S.theme===t.id?t.accent:'transparent'};transition:all .2s;box-shadow:${S.theme===t.id?`0 0 0 3px ${t.accent}33`:'none'}">
+      <div style="height:52px;background:${t.bg};display:flex;align-items:center;justify-content:center;gap:4px;padding:.5rem">
+        <div style="width:20px;height:20px;border-radius:50%;background:${t.accent}"></div>
+        <div style="width:28px;height:10px;border-radius:4px;background:${t.accent}55"></div>
+      </div>
+      <div style="padding:.4rem .5rem;background:${t.dark?'#1e293b':'#f8fafc'}">
+        <p style="font-size:.72rem;font-weight:600;color:${t.dark?'#f8fafc':'#0f172a'};text-align:center">${t.name}</p>
+        ${S.theme===t.id?`<p style="font-size:.65rem;color:${t.accent};text-align:center;font-weight:700">✓ Active</p>`:''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function applyTheme(themeId){
+  S.theme=themeId;
+  document.documentElement.setAttribute('data-theme',themeId);
+  const isDark=THEMES.find(t=>t.id===themeId)?.dark||false;
+  const toggle=document.getElementById('themeToggle');
+  const hToggle=document.getElementById('hTheme');
+  if(toggle) toggle.checked=isDark;
+  if(hToggle) hToggle.checked=isDark;
+  save();
+  renderThemeGrid();
+  toast(`Theme set to ${THEMES.find(t=>t.id===themeId)?.name||themeId}`);
+}
 
 // ── CURRENCY ──
 function changeCurr(){
@@ -1096,7 +1187,7 @@ function setTab(id){
   // FIX: Resize charts when switching to analytics tab
   if(id==='analytics')setTimeout(()=>{wC?.resize();mC?.resize();yC?.resize();cC?.resize();},50);
   // FIX: Sync savings rate input with saved state on every settings visit
-  if(id==='settings') document.getElementById('savRate').value=S.savingsRate;
+  if(id==='settings'){document.getElementById('savRate').value=S.savingsRate;renderThemeGrid();}
 }
 
 // ── MOBILE NAV ──
@@ -1150,8 +1241,12 @@ document.getElementById('clearTxBtn').addEventListener('click',()=>{
   save();updUI();updDrops();
   toast('All transactions cleared.');
 });
-document.getElementById('themeToggle').addEventListener('change',toggleTheme);
-document.getElementById('hTheme').addEventListener('change',toggleTheme);
+document.getElementById('themeToggle').addEventListener('change',e=>{
+  applyTheme(e.target.checked?'dark':'light');
+});
+document.getElementById('hTheme').addEventListener('change',e=>{
+  applyTheme(e.target.checked?'dark':'light');
+});
 
 // FIX: Validate allowance — reject zero and negative
 // FIX: Keep S.profile.budget in sync with S.allowance
