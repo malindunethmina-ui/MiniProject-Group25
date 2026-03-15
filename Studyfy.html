@@ -1110,7 +1110,9 @@ function showPOv(){
   document.getElementById('pCurr').value   = S.currency;
 }
 function hidePOv(){document.getElementById('profileOv').classList.add('hidden');}
-function chkProfile(){if(!S.profile.name||!S.profile.program)showPOv();}
+function hasProfile(){return Boolean(S.profile && S.profile.name && S.profile.program);}
+function chkProfile(){if(!hasProfile())showPOv();}
+
 function savePro(e){
   e.preventDefault();
   const name = document.getElementById('pName').value.trim();
