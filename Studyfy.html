@@ -64,6 +64,10 @@
 *{box-sizing:border-box;margin:0;padding:0;transition:background-color .3s,border-color .3s,color .3s}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column}
 
+.footer{background:var(--sidebar);border-top:1px solid var(--border);color:var(--muted);text-align:center;padding:.8rem 1rem;font-size:.8rem;opacity:.95;}
+.footer span{font-weight:600;color:var(--text);}
+.footer a{color:var(--accent);text-decoration:none;font-weight:600;}
+
 /* SIDEBAR */
 .sidebar{width:var(--sw);background:var(--sidebar);border-right:1px solid var(--border);padding:1.5rem;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;box-shadow:2px 0 20px rgba(0,0,0,.04);overflow-y:auto}
 .brand{font-size:1.15rem;font-weight:800;color:var(--accent);margin-bottom:2rem;display:flex;align-items:center;gap:.6rem;letter-spacing:-.3px}
@@ -200,6 +204,7 @@ tr:hover td{background:rgba(16,185,129,.03)}
   .sidebar{position:fixed;left:-100%;top:0;bottom:0;}
   .sidebar.open{left:0;}
   .main{margin-left:0;max-width:100%;padding:1.2rem 1rem 5rem 1rem;}
+  .footer{margin-top:1rem;}
   .sidebar-overlay{display:none;}
 }
 
@@ -652,6 +657,10 @@ tr:hover td{background:rgba(16,185,129,.03)}
     </div>
   </div>
 </div></main>
+<footer class="footer">
+  <div>Studify • Student Budget Tracker</div>
+  <div style="margin-top:.25rem;font-size:.76rem">Made for campus finance management • <a href="https://github.com" target="_blank" rel="noreferrer">Learn more</a></div>
+</footer>
 <div id="toasts"></div>
 
 <script>
