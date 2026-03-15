@@ -1111,7 +1111,16 @@ function showPOv(){
 }
 function hidePOv(){document.getElementById('profileOv').classList.add('hidden');}
 function hasProfile(){return Boolean(S.profile && S.profile.name && S.profile.program);}
-function chkProfile(){if(!hasProfile())showPOv();}
+function chkProfile(){
+  if(hasProfile()) return;
+  const promptSeen = localStorage.getItem('studify_profile_seen');
+  if(!promptSeen){
+    localStorage.setItem('studify_profile_seen','1');
+    showPOv();
+  } else {
+    toast('Tip: Add your profile for smoother budgeting.');
+  }
+}
 
 function savePro(e){
   e.preventDefault();
@@ -1138,7 +1147,7 @@ function signOut(){
   S.profile={name:'',program:'',university:'',budget:1000,image:null};S.transactions=[];S.allowance=1000;S.savingsRate=5;
   S.categories=['Edu','Food','Transport','Other'];S.filter='All';tempImage=null;
   document.getElementById('allowance').value=1000;document.getElementById('savRate').value=5;
-  save();updProfile();updUI();rendCats();updDrops();toast('Signed out. All data cleared.','i');showPOv();
+  save();localStorage.removeItem('studify_profile_seen');updProfile();updUI();rendCats();updDrops();toast('Signed out. All data cleared.','i');showPOv();
 }
 
 // ── THEME LIBRARY ──
